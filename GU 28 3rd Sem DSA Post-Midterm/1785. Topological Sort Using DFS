@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Node {
+    int vertex;
+    struct Node* next;
+} Node;
+void addEdge(Node** adj, int u, int v) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->vertex = v;
+    newNode->next = adj[u];
+    adj[u] = newNode;
+}
+void dfs(Node** adj, int v, int visited[], int* stack, int* top) {
+    visited[v] = 1;
+    Node* temp = adj[v];
+    while (temp != NULL) {
+        if (!visited[temp->vertex])
+            dfs(adj, temp->vertex, visited, stack, top);
+        temp = temp->next;
+    }
+    stack[(*top)++] = v;
+}
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    Node** adj = (Node**)malloc(n * sizeof(Node*));
+    for (int i = 0; i < n; i++) 
+        adj[i] = NULL;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        addEdge(adj, u, v);
+    }
+    int* visited = (int*)calloc(n, sizeof(int));
+    int* stack = (int*)malloc(n * sizeof(int));
+    int top = 0;
+    for (int i = 0; i < n; i++) {
+        if (!visited[i])
+            dfs(adj, i, visited, stack, &top);
+    }
+    for (int i = top - 1; i >= 0; i--)
+        printf("%d%c", stack[i], i ? ' ' : '\n');
+    for (int i = 0; i < n; i++) {
+        Node* temp = adj[i];
+        while (temp != NULL) {
+            Node* next = temp->next;
+            free(temp);
+            temp = next;
+        }
+    }
+    free(adj);
+    free(visited);
+    free(stack);
+    return 0;
+}
