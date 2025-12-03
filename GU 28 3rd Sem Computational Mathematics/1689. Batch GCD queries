@@ -1,0 +1,25 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        input = input.replace("[", "").replace("]", "");
+        String[] pairs = input.split("\\)\\s*,\\s*\\(");
+        for (String pair : pairs) {
+            pair = pair.replace("(", "").replace(")", "");
+            String[] numbers = pair.split("\\s*,\\s*");
+            int a = Integer.parseInt(numbers[0]);
+            int b = Integer.parseInt(numbers[1]);
+            System.out.println(gcd(a, b));
+        }
+        sc.close();
+    }
+    public static int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+}

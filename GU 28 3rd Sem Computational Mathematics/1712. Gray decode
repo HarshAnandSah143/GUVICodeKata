@@ -1,0 +1,14 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner obj = new Scanner(System.in);
+        String input = obj.nextLine();
+        int g = Integer.parseInt(input.split("=")[1]);
+        int binary = g;
+        while (g > 0) {
+            g = g >> 1;
+            binary = binary ^ g;
+        }
+        System.out.println(binary);
+    }
+}

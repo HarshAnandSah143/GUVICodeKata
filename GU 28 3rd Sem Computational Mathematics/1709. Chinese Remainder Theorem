@@ -1,0 +1,54 @@
+import java.util.Scanner;
+public class Main {
+    static long extendedGCD(long a, long b, long[] xy) {
+        if (b == 0) {
+            xy[0] = 1;
+            xy[1] = 0;
+            return a;
+        }
+        long[] xy1 = new long[2];
+        long gcd = extendedGCD(b, a % b, xy1);
+        xy[0] = xy1[1];
+        xy[1] = xy1[0] - (a / b) * xy1[1];
+        return gcd;
+    }
+    static long modInverse(long a, long m) {
+        long[] xy = new long[2];
+        extendedGCD(a, m, xy);
+        return (xy[0] % m + m) % m;
+    }
+    static long chineseRemainderTheorem(long[] r, long[] m) {
+        int n = r.length;
+        long M = 1;
+        for (int i = 0; i < n; i++) {
+            M *= m[i];
+        }
+        long x = 0;
+        for (int i = 0; i < n; i++) {
+            long Mi = M / m[i];
+            long yi = modInverse(Mi, m[i]);
+            x = (x + r[i] * Mi % M * yi % M) % M;
+        }
+        return (x + M) % M;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split("],");
+        String rPart = parts[0].substring(parts[0].indexOf('[') + 1);
+        String mPart = parts[1].substring(parts[1].indexOf('[') + 1, parts[1].indexOf(']'));
+        String[] rStr = rPart.split(",");
+        String[] mStr = mPart.split(",");
+        long[] r = new long[rStr.length];
+        long[] m = new long[mStr.length];
+        for (int i = 0; i < rStr.length; i++) {
+            r[i] = Long.parseLong(rStr[i].trim());
+        }
+        for (int i = 0; i < mStr.length; i++) {
+            m[i] = Long.parseLong(mStr[i].trim());
+        }
+        long result = chineseRemainderTheorem(r, m);
+        System.out.println(result);
+        sc.close();
+    }
+}

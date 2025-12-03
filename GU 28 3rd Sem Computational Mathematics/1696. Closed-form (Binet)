@@ -1,0 +1,14 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        double sqrt5 = Math.sqrt(5);
+        double phi = (1 + sqrt5) / 2;
+        double psi = (1 - sqrt5) / 2;
+        double fib = (Math.pow(phi, n) - Math.pow(psi, n)) / sqrt5;
+        System.out.println((int)Math.round(fib));
+        sc.close();
+    }
+}

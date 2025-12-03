@@ -1,0 +1,49 @@
+import java.util.*;
+public class Main {
+    static long gcdExtended(long a, long b, long[] xy){
+        if(b == 0){
+            xy[0] = 1;
+            xy[1] = 0;
+            return a;
+        }
+        long[] xy1 = new long[2];
+        long g = gcdExtended(b, a % b, xy1);
+        xy[0] = xy1[1];
+        xy[1] = xy1[0] - (a / b) * xy1[1];
+        return g;
+    }
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String line = sc.nextLine().trim();
+        sc.close();
+        String[] parts = line.split(",");
+        long a = Long.parseLong(parts[0].split("=")[1].trim());
+        long b = Long.parseLong(parts[1].split("=")[1].trim());
+        long c = Long.parseLong(parts[2].split("=")[1].trim());
+        long[] xy = new long[2];
+        long g = gcdExtended(a, b, xy);
+        if(c % g != 0){
+            System.out.println("No solution");
+            return;
+        }
+        long x0 = xy[0] * (c / g);
+        long y0 = xy[1] * (c / g);
+        long kx = b / g;
+        long ky = a / g;
+        long t_min_x = (long)Math.ceil(-1.0 * x0 / kx);
+        long t_max_y = (long)Math.floor(1.0 * y0 / ky);
+        if(t_min_x > t_max_y){
+            System.out.println("No non-negative solution");
+            return;
+        }
+        long t;
+        if(kx - ky > 0){
+            t = t_min_x;
+        } else {
+            t = t_max_y;
+        }
+        long x = x0 + kx * t;
+        long y = y0 - ky * t;
+        System.out.println(x + " " + y);
+    }
+}

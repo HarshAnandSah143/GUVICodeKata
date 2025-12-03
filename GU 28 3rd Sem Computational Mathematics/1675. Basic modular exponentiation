@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static long modPow(long a, long b, long m) {
+        long result = 1;
+        a = a % m;
+
+        while (b > 0) {
+            if (b % 2 == 1) {
+                result = (result * a) % m;
+            }
+            a = (a * a) % m;
+            b /= 2;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        sc.close();
+
+        long a = Long.parseLong(input.split(",")[0].split("=")[1]);
+        long b = Long.parseLong(input.split(",")[1].split("=")[1]);
+        long m = Long.parseLong(input.split(",")[2].split("=")[1]);
+
+        System.out.println(modPow(a, b, m));
+    }
+}

@@ -1,0 +1,28 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split("=");
+        int value = Integer.parseInt(parts[1].split("[<>]+")[0].trim());
+        String operator = "";
+        if (input.contains(">>>")) {
+            operator = ">>>";
+        } else if (input.contains(">>")) {
+            operator = ">>";
+        } else if (input.contains("<<")) {
+            operator = "<<";
+        }
+        int shiftAmount = Integer.parseInt(input.substring(input.lastIndexOf(operator) + operator.length()).trim());
+        int result = 0;
+        if (operator.equals(">>")) {
+            result = value >> shiftAmount;
+        } else if (operator.equals(">>>")) {
+            result = value >>> shiftAmount;
+        } else if (operator.equals("<<")) {
+            result = value << shiftAmount;
+        }
+        System.out.println(result);
+        sc.close();
+    }
+}

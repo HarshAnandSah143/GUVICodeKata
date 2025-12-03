@@ -1,0 +1,24 @@
+import java.util.Scanner;
+ class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine().replace(",", " ").trim();
+        String[] parts = input.split("\\s+");
+        int a = Integer.parseInt(parts[0].split("=")[1]);
+        int b = Integer.parseInt(parts[1].split("=")[1]);
+        int c = Integer.parseInt(parts[2].split("=")[1]);
+        int L = Integer.parseInt(parts[3].split("=")[1]);
+        int R = Integer.parseInt(parts[4].split("=")[1]);
+        boolean found = false;
+        for (int x = L; x <= R; x++) {
+            if ((c - a * x) % b == 0) {
+                int y = (c - a * x) / b;
+                System.out.println(x + " " + y);
+                found = true;
+                break;
+            }
+        }
+        if (!found) System.out.println("No solution");
+        sc.close();
+    }
+ }

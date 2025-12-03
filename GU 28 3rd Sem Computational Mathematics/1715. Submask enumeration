@@ -1,0 +1,21 @@
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int mask = Integer.parseInt(input.split("=")[1]);
+        List<Integer> submasks = new ArrayList<>();
+        for (int s = mask; ; s = (s - 1) & mask) {
+            submasks.add(s);
+            if (s == 0) break;
+        }
+        System.out.print("[");
+        for (int i = 0; i < submasks.size(); i++) {
+            System.out.print(submasks.get(i));
+            if (i < submasks.size() - 1) {
+                System.out.print(",");
+            }
+        }
+        System.out.println("]");
+    }
+}

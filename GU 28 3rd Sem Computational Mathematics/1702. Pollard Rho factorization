@@ -1,0 +1,58 @@
+import java.util.*;
+import java.io.*;
+public class Main {
+    public static long gcd(long a, long b) {
+        if (b == 0) return a;
+        return gcd(b, a % b);
+    }
+    public static long pollardRho(long n) {
+        if (n == 1) return n;
+        if (n % 2 == 0) return 2;
+        long x = 2;
+        long y = 2;
+        long d = 1;
+        while (d == 1) {
+            x = (x * x + 1) % n;
+            y = (y * y + 1) % n;
+            y = (y * y + 1) % n;
+            d = gcd(Math.abs(x - y), n);
+        }
+        return d;
+    }
+    public static void factorize(long n, List<Long> factors) {
+        if (n == 1) return;
+        if (isPrime(n)) {
+            factors.add(n);
+            return;
+        }
+        long factor = pollardRho(n);
+        factorize(factor, factors);
+        factorize(n / factor, factors);
+    }
+    public static boolean isPrime(long n) {
+        if (n < 2) return false;
+        if (n == 2 || n == 3) return true;
+        if (n % 2 == 0 || n % 3 == 0) return false;
+        for (long i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine().trim();
+        long n = Long.parseLong(input.split("=")[1]);
+        List<Long> factors = new ArrayList<>();
+        factorize(n, factors);
+        Collections.sort(factors);
+        System.out.print("[");
+        for (int i = 0; i < factors.size(); i++) {
+            System.out.print(factors.get(i));
+            if (i < factors.size() - 1) {
+                System.out.print(",");
+            }
+        }
+        System.out.println("]");
+    }
+}

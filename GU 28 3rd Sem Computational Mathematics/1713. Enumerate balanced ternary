@@ -1,0 +1,18 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        generateBalancedTernary(n, "");
+    }
+    public static void generateBalancedTernary(int n, String current) {
+        if (current.length() == n) {
+            System.out.println(current);
+            return;
+        }
+        generateBalancedTernary(n, current + "T");
+        generateBalancedTernary(n, current + "0");
+        generateBalancedTernary(n, current + "1");
+    }
+}

@@ -1,0 +1,25 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",");
+        int a = Integer.parseInt(parts[0].split("=")[1]);
+        int b = Integer.parseInt(parts[1].split("=")[1]);
+        int c = Integer.parseInt(parts[2].split("=")[1]);
+        int X = Integer.parseInt(parts[3].split("=")[1]);
+        int Y = Integer.parseInt(parts[4].split("=")[1]);
+        int count = 0;
+        for (int x = 0; x <= X; x++) {
+            int remainder = c - a * x;
+            if (remainder >= 0 && b != 0 && remainder % b == 0) {
+                int y = remainder / b;
+                if (y >= 0 && y <= Y) {
+                    count++;
+                }
+            }
+        }
+        System.out.println(count);
+        sc.close();
+    }
+}

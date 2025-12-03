@@ -1,0 +1,38 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        System.out.println(toBalancedTernary(n));
+    }
+    public static String toBalancedTernary(int n) {
+        if (n == 0) return "0";
+        StringBuilder result = new StringBuilder();
+        boolean negative = n < 0;
+        n = Math.abs(n);
+        while (n > 0) {
+            int remainder = n % 3;
+            n = n / 3;
+            if (remainder == 0) {
+                result.append('0');
+            } else if (remainder == 1) {
+                result.append('1');
+            } else {
+                result.append('T');
+                n++;
+            }
+        }
+        String balanced = result.reverse().toString();
+        if (negative) {
+            StringBuilder flipped = new StringBuilder();
+            for (char c : balanced.toCharArray()) {
+                if (c == '1') flipped.append('T');
+                else if (c == 'T') flipped.append('1');
+                else flipped.append('0');
+            }
+            return flipped.toString();
+        }
+        return balanced;
+    }
+}

@@ -1,0 +1,32 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        int result = eulerTotient(n);
+        System.out.println(result);
+        sc.close();
+    }
+    public static int eulerTotient(int n) {
+        int result = n;
+        if (n % 2 == 0) {
+            result -= result / 2;
+            while (n % 2 == 0) {
+                n /= 2;
+            }
+        }
+        for (int i = 3; i * i <= n; i += 2) {
+            if (n % i == 0) {
+                result -= result / i;
+                while (n % i == 0) {
+                    n /= i;
+                }
+            }
+        }
+        if (n > 1) {
+            result -= result / n;
+        }
+        return result;
+    }
+}

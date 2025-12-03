@@ -1,0 +1,31 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        long result = fibonacci(n);
+        System.out.println(result);
+    }
+    public static long fibonacci(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        
+        return fibFast(n)[0];
+    }
+    private static long[] fibFast(int n) {
+        if (n == 0) {
+            return new long[]{0, 1};
+        }
+        long[] ab = fibFast(n / 2);
+        long a = ab[0]; // F(k)
+        long b = ab[1]; // F(k+1)
+        long c = a * (2 * b - a); // F(2k)
+        long d = a * a + b * b;   // F(2k+1)
+        if (n % 2 == 0) {
+            return new long[]{c, d};
+        } else {
+            return new long[]{d, c + d};
+        }
+    }
+}

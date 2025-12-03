@@ -1,0 +1,32 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        int m = Integer.parseInt(input.split("=")[1]);
+        ArrayList<Integer> sequence = new ArrayList<>();
+        sequence.add(0);
+        sequence.add(1);
+        int prev = 0, curr = 1;
+        int period = 0;
+        while (true) {
+            int next = (prev + curr) % m;
+            sequence.add(next);
+            prev = curr;
+            curr = next;
+            if (prev == 0 && curr == 1) {
+                period = sequence.size() - 2;
+                break;
+            }
+        }
+        System.out.print("Period: " + period);
+        System.out.println();
+        System.out.print("Sequence: ");
+        for (int i = 0; i < period; i++) {
+            if (i > 0) System.out.print(" ");
+            System.out.print(sequence.get(i));
+        }
+        System.out.println();
+    }
+}

@@ -1,0 +1,35 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        List<Integer> primes = linearSieve(n);
+        System.out.print("[");
+        for (int i = 0; i < primes.size(); i++) {
+            System.out.print(primes.get(i));
+            if (i < primes.size() - 1) {
+                System.out.print(",");
+            }
+        }
+        System.out.println("]");
+    }
+    public static List<Integer> linearSieve(int n) {
+        List<Integer> primes = new ArrayList<>();
+        int[] spf = new int[n + 1];
+        for (int i = 2; i <= n; i++) {
+            if (spf[i] == 0) { // i is prime
+                spf[i] = i;
+                primes.add(i);
+            }
+            for (int j = 0; j < primes.size(); j++) {
+                int prime = primes.get(j);
+                if (prime > spf[i] || (long)prime * i > n) {
+                    break;
+                }
+                spf[prime * i] = prime;
+            }
+        }
+        return primes;
+    }
+}

@@ -1,0 +1,44 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine().trim().replaceAll(" ", "");
+        int openBracket = input.indexOf('[');
+        int closeBracket = input.indexOf(']');
+        int kIdx = input.indexOf(",k=");
+        String permStr = input.substring(openBracket + 1, closeBracket);
+        String kStr = input.substring(kIdx + 3).replaceAll("\\D", "");
+        long k = Long.parseLong(kStr);
+        String[] permValues = permStr.split(",");
+        int n = permValues.length;
+        int[] p = new int[n];
+        for (int i = 0; i < n; i++) {
+            p[i] = Integer.parseInt(permValues[i].replaceAll("\\D", "")) - 1;
+        }
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) {
+            int[][] lift = new int[64][n];
+            for (int pos = 0; pos < n; pos++) {
+                lift[0][pos] = p[pos];
+            }
+            for (int j = 1; j < 64; j++) {
+                for (int pos = 0; pos < n; pos++) {
+                    lift[j][pos] = lift[j-1][lift[j-1][pos]];
+                }
+            }
+            int pos = i;
+            for (int j = 0; j < 64; j++) {
+                if ((k & (1L << j)) != 0) {
+                    pos = lift[j][pos];
+                }
+            }
+            result[pos] = i + 1; // Position pos gets element from position i
+        }
+        System.out.print("[");
+        for (int i = 0; i < n; i++) {
+            if (i > 0) System.out.print(",");
+            System.out.print(result[i]);
+        }
+        System.out.println("]");
+    }
+}

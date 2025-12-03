@@ -1,0 +1,28 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class Main {
+    static long power(long base, long exp, long mod) {
+        long result = 1;
+        base = base % mod;
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result = (result * base) % mod;
+            }
+            exp = exp / 2;
+            base = (base * base) % mod;
+        }
+        return result;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",");
+        long a = Long.parseLong(parts[0].split("=")[1]);
+        long b = Long.parseLong(parts[1].split("=")[1]);
+        long m = Long.parseLong(parts[2].split("=")[1]);
+        long result = power(a, b, m);
+        System.out.println(result);
+        sc.close();
+    }
+}

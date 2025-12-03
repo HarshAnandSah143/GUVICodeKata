@@ -1,0 +1,40 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner obj = new Scanner(System.in);
+        String input = obj.nextLine();
+        input = input.substring(input.indexOf('[') + 1, input.indexOf(']'));
+        String[] parts = input.split(",");
+        int n = parts.length;
+        int[] p = new int[n];
+        for (int i = 0; i < n; i++) {
+            p[i] = Integer.parseInt(parts[i].trim()) - 1;
+        }
+        boolean[] visited = new boolean[n];
+        List<Integer> cycleLengths = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                int cycleLength = 0;
+                int current = i;
+                while (!visited[current]) {
+                    visited[current] = true;
+                    current = p[current];
+                    cycleLength++;
+                }
+                cycleLengths.add(cycleLength);
+            }
+        }
+        long result = 1;
+        for (int length : cycleLengths) {
+            result = lcm(result, length);
+        }
+        System.out.println(result);
+    }
+    private static long gcd(long a, long b) {
+        if (b == 0) return a;
+        return gcd(b, a % b);
+    }
+    private static long lcm(long a, long b) {
+        return (a * b) / gcd(a, b);
+    }
+}

@@ -1,0 +1,18 @@
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();  
+        sc.close();
+
+        BigInteger n = new BigInteger(input.split(",")[0].split("=")[1]);
+        BigInteger m = new BigInteger(input.split(",")[1].split("=")[1]);
+        BigInteger a = BigInteger.valueOf(2);
+
+        BigInteger result = a.modPow(n, m);
+
+        System.out.println(result);
+    }
+}

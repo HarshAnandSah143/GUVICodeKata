@@ -1,0 +1,28 @@
+import java.util.Scanner;
+public class Main {
+    public static long power(long base, long exp, long mod) {
+        long result = 1;
+        base = base % mod;
+        while (exp > 0) {
+            if (exp % 2 == 1) {
+                result = (result * base) % mod;
+            }
+            exp = exp / 2;
+            base = (base * base) % mod;
+        }
+        return result;
+    }
+    public static long modularInverse(long a, long m) {
+        return power(a, m - 2, m);
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        String[] parts = input.split(",");
+        long a = Long.parseLong(parts[0].split("=")[1]);
+        long m = Long.parseLong(parts[1].split("=")[1]);
+        long result = modularInverse(a, m);
+        System.out.println(result);
+        scanner.close();
+    }
+}

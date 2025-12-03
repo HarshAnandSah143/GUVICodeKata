@@ -1,0 +1,47 @@
+import java.util.Scanner;
+public class Main {
+    static class GCDResult {
+        long gcd, x, y;
+        GCDResult(long gcd, long x, long y) {
+            this.gcd = gcd;
+            this.x = x;
+            this.y = y;
+        }
+    }
+    static GCDResult extendedGCD(long a, long b) {
+        if (b == 0) {
+            return new GCDResult(a, 1, 0);
+        }
+        GCDResult result = extendedGCD(b, a % b);
+        long x = result.y;
+        long y = result.x - (a / b) * result.y;
+        return new GCDResult(result.gcd, x, y);
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",");
+        long a = Long.parseLong(parts[0].split("=")[1]);
+        long b = Long.parseLong(parts[1].split("=")[1]);
+        long c = Long.parseLong(parts[2].split("=")[1]);
+        GCDResult result = extendedGCD(Math.abs(a), Math.abs(b));
+        long gcd = result.gcd;
+        if (c % gcd != 0) {
+            System.out.println("No solution");
+        } else {
+            long x0 = result.x * (c / gcd);
+            long y0 = result.y * (c / gcd);
+            if (a < 0) x0 = -x0;
+            if (b < 0) y0 = -y0;
+            long bPrime = Math.abs(b) / gcd;
+            long aPrime = Math.abs(a) / gcd;
+            if (bPrime > 0) {
+                long k = (long) Math.ceil(-1.0 * x0 / bPrime);
+                x0 = x0 + k * bPrime;
+                y0 = y0 - k * aPrime;
+            }
+            System.out.println(x0 + " " + y0);
+        }
+        sc.close();
+    }
+}

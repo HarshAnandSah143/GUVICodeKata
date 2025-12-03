@@ -1,0 +1,28 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        long result = sumOfDivisors(n);
+        System.out.println(result);
+    }
+    public static long sumOfDivisors(int n) {
+        long sum = 1;
+        for (int p = 2; p * p <= n; p++) {
+            if (n % p == 0) {
+                int power = 0;
+                while (n % p == 0) {
+                    n /= p;
+                    power++;
+                }
+                long pPower = (long) Math.pow(p, power + 1);
+                sum *= (pPower - 1) / (p - 1);
+            }
+        }
+        if (n > 1) {
+            sum *= (n + 1);
+        }
+        return sum;
+    }
+}

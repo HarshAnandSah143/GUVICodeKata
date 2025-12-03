@@ -1,0 +1,26 @@
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine().trim();
+        int n = Integer.parseInt(input.split("=")[1].trim());
+        long totalSubsets = 1L << n;
+        StringBuilder result = new StringBuilder();
+        result.append("[");
+        for (long mask = 0; mask < totalSubsets; mask++) {
+            long sum = 0;
+            for (int i = 0; i < n; i++) {
+                if ((mask & (1L << i)) != 0) {
+                    sum += (1L << i);
+                }
+            }
+            result.append(sum);
+            if (mask < totalSubsets - 1) {
+                result.append(",");
+            }
+        }
+        result.append("]");
+        System.out.println(result.toString());
+        sc.close();
+    }
+}

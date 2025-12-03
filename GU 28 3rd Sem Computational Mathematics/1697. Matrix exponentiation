@@ -1,0 +1,43 @@
+import java.util.Scanner;
+public class Main {
+    static long[][] multiplyMatrix(long[][] A, long[][] B, long mod) {
+        long[][] result = new long[2][2];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                result[i][j] = 0;
+                for (int k = 0; k < 2; k++) {
+                    result[i][j] = (result[i][j] + (A[i][k] * B[k][j]) % mod) % mod;
+                }
+            }
+        }
+        return result;
+    }
+    static long[][] matrixPower(long[][] base, long n, long mod) {
+        long[][] result = {{1, 0}, {0, 1}};
+        while (n > 0) {
+            if (n % 2 == 1) {
+                result = multiplyMatrix(result, base, mod);
+            }
+            base = multiplyMatrix(base, base, mod);
+            n /= 2;
+        }
+        return result;
+    }
+    static long fibonacciMatrix(long n, long mod) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        long[][] base = {{1, 1}, {1, 0}};
+        long[][] result = matrixPower(base, n - 1, mod);
+        return result[0][0];
+    }
+    public static void main(String[] args) {
+        Scanner obj = new Scanner(System.in);
+        String input = obj.nextLine();
+        String[] parts = input.split(",");
+        long n = Long.parseLong(parts[0].split("=")[1]);
+        long m = Long.parseLong(parts[1].split("=")[1]);
+        long result = fibonacciMatrix(n, m);
+        System.out.println(result);
+        obj.close();
+    }
+}

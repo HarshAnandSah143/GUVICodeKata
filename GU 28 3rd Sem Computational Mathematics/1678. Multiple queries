@@ -1,0 +1,27 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        input = input.substring(1, input.length() - 1);
+        String[] parts = input.split(",");
+        long a = Long.parseLong(parts[0].trim());
+        long b = Long.parseLong(parts[1].trim());
+        long m = Long.parseLong(parts[2].trim());
+        long result = fastExponentiation(a, b, m);
+        System.out.println(result);
+        scanner.close();
+    }
+    public static long fastExponentiation(long base, long exp, long mod) {
+        long result = 1;
+        base = base % mod;
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                result = (result * base) % mod;
+            }
+            exp = exp >> 1;
+            base = (base * base) % mod;
+        }
+        return result;
+    }
+}

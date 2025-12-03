@@ -1,0 +1,53 @@
+import java.util.Scanner;
+public class Main {
+    private static long modPow(long base, long exp, long mod) {
+        long result = 1;
+        base %= mod;
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                result = multiplyMod(result, base, mod);
+            }
+            base = multiplyMod(base, base, mod);
+            exp >>= 1;
+        }
+        return result;
+    }
+    private static long multiplyMod(long a, long b, long mod) {
+        return ((a % mod) * (b % mod)) % mod;
+    }
+    private static boolean millerRabin(long n, long a) {
+        if (n == a) return true;
+        long d = n - 1;
+        int r = 0;
+        while ((d & 1) == 0) {
+            d >>= 1;
+            r++;
+        }
+        long x = modPow(a, d, n);
+        if (x == 1 || x == n - 1) return true;
+        
+        for (int i = 0; i < r - 1; i++) {
+            x = multiplyMod(x, x, n);
+            if (x == n - 1) return true;
+        }
+        return false;
+    }
+    private static boolean isPrime(long n) {
+        if (n < 2) return false;
+        if (n == 2 || n == 3) return true;
+        if ((n & 1) == 0) return false;
+        long[] witnesses = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+        for (long a : witnesses) {
+            if (a >= n) break;
+            if (!millerRabin(n, a)) return false;
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        long n = Long.parseLong(input.split("=")[1]);
+        System.out.println(isPrime(n));
+        scanner.close();
+    }
+}

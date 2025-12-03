@@ -1,0 +1,22 @@
+import java.util.*;
+public class Main {
+    private static Map<Integer, Long> memo = new HashMap<>();
+    public static long fibonacci(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        if (memo.containsKey(n)) {
+            return memo.get(n);
+        }
+        long result = fibonacci(n - 1) + fibonacci(n - 2);
+        memo.put(n, result);
+        return result;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        System.out.println(fibonacci(n));
+        sc.close();
+    }
+}

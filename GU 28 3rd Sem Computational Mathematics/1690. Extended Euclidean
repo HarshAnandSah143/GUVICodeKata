@@ -1,0 +1,30 @@
+import java.util.Scanner;
+public class Main {
+    public static class Result {
+        int gcd, x, y;
+        Result(int gcd, int x, int y) {
+            this.gcd = gcd;
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public static Result extendedGCD(int a, int b) {
+        if (b == 0) {
+            return new Result(a, 1, 0);
+        }
+        Result result = extendedGCD(b, a % b);
+        int x1 = result.y;
+        int y1 = result.x - (a / b) * result.y;
+        return new Result(result.gcd, x1, y1);
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",");
+        int a = Integer.parseInt(parts[0].split("=")[1]);
+        int b = Integer.parseInt(parts[1].split("=")[1]);
+        Result result = extendedGCD(a, b);
+        System.out.println(result.x + " " + result.y);
+        sc.close();
+    }
+}

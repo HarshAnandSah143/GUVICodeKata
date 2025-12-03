@@ -1,0 +1,42 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",k=");
+        String pStr = parts[0].substring(parts[0].indexOf('[') + 1, parts[0].indexOf(']'));
+        int k = Integer.parseInt(parts[1]);
+        String[] pArr = pStr.split(",");
+        int n = pArr.length;
+        int[] p = new int[n + 1]; // 1-indexed
+        for (int i = 0; i < n; i++) {
+            p[i + 1] = Integer.parseInt(pArr[i]);
+        }
+        int[] result = new int[n + 1];
+        boolean[] visited = new boolean[n + 1];
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                List<Integer> cycle = new ArrayList<>();
+                int curr = i;
+                while (!visited[curr]) {
+                    visited[curr] = true;
+                    cycle.add(curr);
+                    curr = p[curr];
+                }
+                int cycleLen = cycle.size();
+                int shift = k % cycleLen;
+                for (int j = 0; j < cycleLen; j++) {
+                    int pos = cycle.get(j);
+                    int targetPos = cycle.get((j + shift) % cycleLen);
+                    result[targetPos] = pos;
+                }
+            }
+        }
+        System.out.print("[");
+        for (int i = 1; i <= n; i++) {
+            System.out.print(result[i]);
+            if (i < n) System.out.print(",");
+        }
+        System.out.println("]");
+    }
+}

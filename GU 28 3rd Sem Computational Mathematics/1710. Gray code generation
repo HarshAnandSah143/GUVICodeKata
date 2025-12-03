@@ -1,0 +1,27 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        List<Integer> grayCode = generateGrayCode(n);
+        System.out.print("[");
+        for (int i = 0; i < grayCode.size(); i++) {
+            System.out.print(grayCode.get(i));
+            if (i < grayCode.size() - 1) {
+                System.out.print(",");
+            }
+        }
+        System.out.println("]");
+        sc.close();
+    }
+    public static List<Integer> generateGrayCode(int n) {
+        List<Integer> result = new ArrayList<>();
+        int size = 1 << n; // 2^n
+        
+        for (int i = 0; i < size; i++) {
+            result.add(i ^ (i >> 1));
+        }
+        return result;
+    }
+}

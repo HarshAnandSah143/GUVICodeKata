@@ -1,0 +1,23 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",i=");
+        String pStr = parts[0].substring(2);
+        String[] ikParts = parts[1].split(",k=");
+        int i = Integer.parseInt(ikParts[0]);
+        int k = Integer.parseInt(ikParts[1]);
+        pStr = pStr.substring(1, pStr.length() - 1);
+        String[] pArr = pStr.split(",");
+        int[] p = new int[pArr.length];
+        for (int j = 0; j < pArr.length; j++) {
+            p[j] = Integer.parseInt(pArr[j]);
+        }
+        int currentPos = i;
+        for (int j = 0; j < k; j++) {
+            currentPos = p[currentPos - 1]; // -1 for 0-indexing
+        }
+        System.out.println(currentPos);
+    }
+}

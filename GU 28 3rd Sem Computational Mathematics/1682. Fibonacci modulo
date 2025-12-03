@@ -1,0 +1,32 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        String[] parts = input.split(",");
+        long n = Long.parseLong(parts[0].split("=")[1]);
+        long m = Long.parseLong(parts[1].split("=")[1]);
+        System.out.println(fibMod(n, m));
+    }
+    private static long fibMod(long n, long m) {
+        if (n == 0) return 0;
+        if (n == 1) return 1 % m;
+        long[] result = fibFast(n, m);
+        return result[0];
+    }
+    private static long[] fibFast(long n, long m) {
+        if (n == 0) {
+            return new long[]{0, 1};
+        }
+        long[] temp = fibFast(n / 2, m);
+        long fk = temp[0];
+        long fk1 = temp[1];
+        long f2k = (fk * ((2 * fk1 - fk + m) % m)) % m;
+        long f2k1 = (fk * fk % m + fk1 * fk1 % m) % m;
+        if (n % 2 == 0) {
+            return new long[]{f2k, f2k1};
+        } else {
+            return new long[]{f2k1, (f2k + f2k1) % m};
+        }
+    }
+}

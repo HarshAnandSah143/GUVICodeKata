@@ -1,0 +1,32 @@
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        int n = Integer.parseInt(input.split("=")[1]);
+        ArrayList<Integer> fib = new ArrayList<>();
+        fib.add(1);
+        fib.add(2);
+        while (fib.get(fib.size() - 1) < n) {
+            int next = fib.get(fib.size() - 1) + fib.get(fib.size() - 2);
+            fib.add(next);
+        }
+        int maxIndex = fib.size() - 1;
+        if (fib.get(maxIndex) > n) {
+            maxIndex--;
+        }
+        StringBuilder result = new StringBuilder();
+        int remaining = n;
+        for (int i = maxIndex; i >= 0; i--) {
+            if (fib.get(i) <= remaining) {
+                result.append('1');
+                remaining -= fib.get(i);
+            } else {
+                result.append('0');
+            }
+        }
+        result.append('1');
+        System.out.println(result.toString());
+        sc.close();
+    }
+}

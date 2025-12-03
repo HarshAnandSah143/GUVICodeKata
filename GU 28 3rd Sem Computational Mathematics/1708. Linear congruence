@@ -1,0 +1,45 @@
+import java.util.Scanner;
+import java.math.BigInteger;
+public class Main {
+    static long[] extendedGCD(long a, long b) {
+        if (b == 0) {
+            return new long[]{a, 1, 0};
+        }
+        long[] result = extendedGCD(b, a % b);
+        long gcd = result[0];
+        long x1 = result[1];
+        long y1 = result[2];
+        long x = y1;
+        long y = x1 - (a / b) * y1;
+        return new long[]{gcd, x, y};
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNextLine()) {
+            String input = sc.nextLine().trim();
+            if (input.isEmpty()) continue;
+            String[] parts = input.split(",");
+            long a = Long.parseLong(parts[0].split("=")[1].trim());
+            long b = Long.parseLong(parts[1].split("=")[1].trim());
+            long m = Long.parseLong(parts[2].split("=")[1].trim());
+            long[] result = extendedGCD(a, m);
+            long gcd = result[0];
+            long x0 = result[1];
+            if (b % gcd != 0) {
+                System.out.println("None");
+            } else {
+                long aReduced = a / gcd;
+                long bReduced = b / gcd;
+                long mReduced = m / gcd;
+                long[] resultReduced = extendedGCD(aReduced, mReduced);
+                long x0Reduced = resultReduced[1];
+                BigInteger bigX0 = BigInteger.valueOf(x0Reduced);
+                BigInteger bigB = BigInteger.valueOf(bReduced);
+                BigInteger bigM = BigInteger.valueOf(mReduced);
+                BigInteger x = bigX0.multiply(bigB).mod(bigM);
+                System.out.println(x);
+            }
+        }
+        sc.close();
+    }
+}
