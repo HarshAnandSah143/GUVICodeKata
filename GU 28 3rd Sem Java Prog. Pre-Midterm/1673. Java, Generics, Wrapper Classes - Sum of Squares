@@ -1,0 +1,23 @@
+import java.util.*;
+class SumOfSquares<T extends Number> {
+    public double computeSumOfSquares(List<T> list) {
+        double sum = 0;
+        for (T item : list) {
+            double val = item.doubleValue();
+            sum += val * val;
+        }
+        return sum;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Double> numbers = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            numbers.add(sc.nextDouble());
+        }
+        SumOfSquares<Double> sos = new SumOfSquares<>();
+        System.out.println("Sum of Squares: " + sos.computeSumOfSquares(numbers));
+    }
+}

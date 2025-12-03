@@ -1,0 +1,42 @@
+import java.util.*;
+
+interface AddToCart {
+    void addItem(String item);
+}
+
+interface Payment {
+    void makePayment();
+}
+
+class ShoppingCart implements AddToCart, Payment {
+    List<String> items = new ArrayList<>();
+
+    @Override
+    public void addItem(String item) {
+        items.add(item);
+        System.out.println("Item added: " + item);
+    }
+
+    @Override
+    public void makePayment() {
+        System.out.println("Payment successful for " + items.size() + " items.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ShoppingCart cart = new ShoppingCart();
+
+        while (sc.hasNextLine()) {
+            String input = sc.nextLine().trim();
+            if (input.equalsIgnoreCase("pay")) {
+                cart.makePayment();
+                break;
+            } else if (input.toLowerCase().startsWith("add ")) {
+                String item = input.substring(4).trim();
+                cart.addItem(item);
+            }
+        }
+    }
+}

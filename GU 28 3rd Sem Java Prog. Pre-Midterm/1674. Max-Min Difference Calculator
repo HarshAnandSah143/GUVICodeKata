@@ -1,0 +1,21 @@
+import java.util.*;
+class MaxMinDifference<T extends Number & Comparable<T>> {
+    public double findDifference(List<T> list) {
+        if (list == null || list.isEmpty()) return 0.0;
+        T max = Collections.max(list);
+        T min = Collections.min(list);
+        return max.doubleValue() - min.doubleValue();
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Double> numbers = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            numbers.add(sc.nextDouble());
+        }
+        MaxMinDifference<Double> mmd = new MaxMinDifference<>();
+        System.out.println("Difference: " + mmd.findDifference(numbers));
+    }
+}

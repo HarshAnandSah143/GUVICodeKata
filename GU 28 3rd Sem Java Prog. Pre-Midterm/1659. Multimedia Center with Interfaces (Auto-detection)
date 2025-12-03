@@ -1,0 +1,38 @@
+import java.util.*;
+interface AudioPlayer {
+    void playAudio();
+}
+interface VideoPlayer {
+    void playVideo();
+}
+class MediaCenter implements AudioPlayer, VideoPlayer {
+    String fileName;
+    MediaCenter(String fileName) {
+        this.fileName = fileName.toLowerCase();
+    }
+    @Override
+    public void playAudio() {
+        System.out.println("Audio file detected: Playing with 128kbps quality");
+    }
+    @Override
+    public void playVideo() {
+        System.out.println("Video file detected: Playing at 1080p resolution");
+    }
+    public void play() {
+        if (fileName.endsWith(".mp3") || fileName.endsWith(".wav") || fileName.endsWith(".flac")) {
+            playAudio();
+        } else if (fileName.endsWith(".mp4") || fileName.endsWith(".mkv") || fileName.endsWith(".avi")) {
+            playVideo();
+        } else {
+            System.out.println("Unknown file type");
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String fileName = sc.nextLine();
+        MediaCenter mediaCenter = new MediaCenter(fileName);
+        mediaCenter.play();
+    }
+}

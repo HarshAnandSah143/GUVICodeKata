@@ -1,0 +1,26 @@
+import java.util.*;
+class ATMException extends Exception {
+    ATMException(String msg) { super(msg); }
+}
+class InvalidPINException extends ATMException {
+    InvalidPINException(String msg) { super(msg); }
+}
+class InsufficientBalanceException extends ATMException {
+    InsufficientBalanceException(String msg) { super(msg); }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int pin = sc.nextInt();
+        int amount = sc.nextInt();
+        int balance = 1000;
+        try {
+            if(pin != 1111) throw new InvalidPINException("Invalid PIN!");
+            if(amount > balance) throw new InsufficientBalanceException("Insufficient balance!");
+            balance -= amount;
+            System.out.println("Balance: " + balance);
+        } catch(ATMException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

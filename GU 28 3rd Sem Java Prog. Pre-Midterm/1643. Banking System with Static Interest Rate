@@ -1,0 +1,31 @@
+import java.util.*;
+class BankAccount {
+    double balance;
+    static double interestRate = 0.05;
+    BankAccount(double balance) {
+        this.balance = balance;
+    }
+    void deposit(double amount) {
+        balance += amount;
+    }
+    void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+        }
+    }
+    double calculateInterest() {
+        return balance * interestRate;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double initialDeposit = sc.nextDouble();
+        double withdrawalAmount = sc.nextDouble();
+        BankAccount account = new BankAccount(initialDeposit);
+        account.withdraw(withdrawalAmount);
+        double interest = account.calculateInterest();
+        System.out.println(account.balance);
+        System.out.println((int)interest);
+    }
+}

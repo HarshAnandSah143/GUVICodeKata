@@ -1,0 +1,23 @@
+import java.util.*;
+class Item {
+    static double totalDiscount = 0;
+    double itemPrice;
+    double discountPercent;
+    Item(double itemPrice, double discountPercent) {
+        this.itemPrice = itemPrice;
+        this.discountPercent = discountPercent;
+        double discount = (itemPrice * discountPercent) / 100;
+        totalDiscount += discount;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNextDouble()) {
+            double price = sc.nextDouble();
+            double percent = sc.nextDouble();
+            new Item(price, percent);
+        }
+        System.out.println("Total Discount: " + (int)Item.totalDiscount);
+    }
+}

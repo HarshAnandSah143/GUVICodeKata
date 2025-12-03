@@ -1,0 +1,32 @@
+import java.util.*;
+class Product {
+    final double maxDiscount = 500;
+    double price;
+    double discount;
+    Product(double price, double discount) {
+        this.price = price;
+        this.discount = discount;
+    }
+}
+class SpecialProduct extends Product {
+    SpecialProduct(double price, double discount) {
+        super(price, discount);
+    }
+    public double getAppliedDiscount() {
+        if (discount > maxDiscount) {
+            return maxDiscount;
+        } else {
+            return discount;
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double price = sc.nextDouble();
+        double discount = sc.nextDouble();
+
+        SpecialProduct sp = new SpecialProduct(price, discount);
+        System.out.println("Applied Discount: " + (int)sp.getAppliedDiscount());
+    }
+}

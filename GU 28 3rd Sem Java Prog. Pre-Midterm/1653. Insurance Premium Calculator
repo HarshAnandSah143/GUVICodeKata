@@ -1,0 +1,56 @@
+import java.util.*;
+abstract class Insurance {
+    double basePremium;
+    Insurance(double basePremium) {
+        this.basePremium = basePremium;
+    }
+    abstract double calculatePremium();
+}
+class LifeInsurance extends Insurance {
+    LifeInsurance(double basePremium) {
+        super(basePremium);
+    }
+    @Override
+    double calculatePremium() {
+        return basePremium * 1.10;
+    }
+}
+class HealthInsurance extends Insurance {
+    HealthInsurance(double basePremium) {
+        super(basePremium);
+    }
+    @Override
+    double calculatePremium() {
+        return basePremium * 1.20;
+    }
+}
+class CarInsurance extends Insurance {
+    CarInsurance(double basePremium) {
+        super(basePremium);
+    }
+    @Override
+    double calculatePremium() {
+        return basePremium * 1.30;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String type = sc.nextLine().toLowerCase();
+        double basePremium = sc.nextDouble();
+        Insurance insurance;
+        String displayType = "";
+        if (type.equals("life")) {
+            insurance = new LifeInsurance(basePremium);
+            displayType = "Life Insurance";
+        } else if (type.equals("health")) {
+            insurance = new HealthInsurance(basePremium);
+            displayType = "Health Insurance";
+        } else {
+            insurance = new CarInsurance(basePremium);
+            displayType = "Car Insurance";
+        }
+        System.out.println("Insurance Type: " + displayType);
+        System.out.println("Premium: " + insurance.calculatePremium());
+    }
+}

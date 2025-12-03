@@ -1,0 +1,43 @@
+import java.util.*;
+abstract class Vehicle {
+    protected double distance;
+    protected double fuel;
+    Vehicle(double distance, double fuel) {
+        this.distance = distance;
+        this.fuel = fuel;
+    }
+    public abstract double fuelEfficiency();
+}
+class Car extends Vehicle {
+    Car(double distance, double fuel) {
+        super(distance, fuel);
+    }
+    @Override
+    public double fuelEfficiency() {
+        return distance / fuel;
+    }
+}
+class Truck extends Vehicle {
+    Truck(double distance, double fuel) {
+        super(distance, fuel);
+    }
+    @Override
+    public double fuelEfficiency() {
+        return distance / (fuel * 1.25);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String type = sc.next();
+        double distance = sc.nextDouble();
+        double fuel = sc.nextDouble();
+        Vehicle v;
+        if (type.equalsIgnoreCase("Car")) {
+            v = new Car(distance, fuel);
+        } else {
+            v = new Truck(distance, fuel);
+        }
+        System.out.println("Fuel Efficiency: " + v.fuelEfficiency());
+    }
+}

@@ -1,0 +1,29 @@
+import java.util.*;
+abstract class Shape {
+    abstract double perimeter();
+}
+class Triangle extends Shape {
+    double side1, side2, side3;
+    Triangle(double side1, double side2, double side3) {
+        this.side1 = side1;
+        this.side2 = side2;
+        this.side3 = side3;
+    }
+    @Override
+    double perimeter() {
+        return side1 + side2 + side3;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String type = sc.next();
+        double a = sc.nextDouble();
+        double b = sc.nextDouble();
+        double c = sc.nextDouble();
+        if (type.equalsIgnoreCase("triangle")) {
+            Shape triangle = new Triangle(a, b, c);
+            System.out.println("Perimeter: " + (int)triangle.perimeter());
+        }
+    }
+}

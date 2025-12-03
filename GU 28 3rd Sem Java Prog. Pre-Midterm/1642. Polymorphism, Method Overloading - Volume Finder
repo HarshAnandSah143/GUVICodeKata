@@ -1,0 +1,36 @@
+import java.util.*;
+class VolumeFinder {
+    double calculateVolume(double side) {
+        return side * side * side;
+    }
+    double calculateVolume(double length, double breadth, double height) {
+        return length * breadth * height;
+    }
+    double calculateVolume(double radius, int height) {
+        return Math.PI * radius * radius * height;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        VolumeFinder v = new VolumeFinder();
+        String shape = sc.next().toLowerCase();
+        double volume = 0;
+        if (shape.equals("cube")) {
+            double side = sc.nextDouble();
+            volume = v.calculateVolume(side);
+        } 
+        else if (shape.equals("cuboid")) {
+            double l = sc.nextDouble();
+            double b = sc.nextDouble();
+            double h = sc.nextDouble();
+            volume = v.calculateVolume(l, b, h);
+        } 
+        else if (shape.equals("cylinder")) {
+            double r = sc.nextDouble();
+            int h = sc.nextInt();
+            volume = v.calculateVolume(r, h);
+        }
+        System.out.printf("%.2f", volume);
+    }
+}

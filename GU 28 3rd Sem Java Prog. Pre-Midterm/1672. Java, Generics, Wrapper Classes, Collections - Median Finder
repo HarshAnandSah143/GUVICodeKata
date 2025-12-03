@@ -1,0 +1,26 @@
+import java.util.*;
+class MedianFinder<T extends Number & Comparable<T>> {
+    public double findMedian(List<T> list) {
+        Collections.sort(list);
+        int n = list.size();
+        if (n % 2 == 1) {
+            return list.get(n / 2).doubleValue();
+        } else {
+            double mid1 = list.get(n / 2 - 1).doubleValue();
+            double mid2 = list.get(n / 2).doubleValue();
+            return (mid1 + mid2) / 2.0;
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Double> numbers = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            numbers.add(sc.nextDouble());
+        }
+        MedianFinder<Double> mf = new MedianFinder<>();
+        System.out.println("Median: " + mf.findMedian(numbers));
+    }
+}

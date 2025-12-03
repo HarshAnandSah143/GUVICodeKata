@@ -1,0 +1,43 @@
+import java.util.*;
+class GenericStack<T> {
+    private ArrayList<T> stack = new ArrayList<>();
+    public void push(T item) {
+        stack.add(item);
+        System.out.println("Pushed: " + item);
+    }
+    public void pop() {
+        if (stack.isEmpty()) {
+            System.out.println("Stack is empty");
+        } else {
+            T item = stack.remove(stack.size() - 1);
+            System.out.println("Popped: " + item);
+        }
+    }
+    public void peek() {
+        if (stack.isEmpty()) {
+            System.out.println("Stack is empty");
+        } else {
+            T item = stack.get(stack.size() - 1);
+            System.out.println("Peek: " + item);
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine(); 
+        GenericStack<String> stack = new GenericStack<>();
+        for (int i = 0; i < n; i++) {
+            String command = sc.nextLine();
+            if (command.toLowerCase().startsWith("push ")) {
+                String value = command.substring(5).trim();
+                stack.push(value);
+            } else if (command.equalsIgnoreCase("pop")) {
+                stack.pop();
+            } else if (command.equalsIgnoreCase("peek")) {
+                stack.peek();
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+import java.util.*;
+abstract class Ticket {
+    int distance;
+    Ticket(int distance) {
+        this.distance = distance;
+    }
+    abstract int calculateFare();
+}
+class BusTicket extends Ticket {
+    BusTicket(int distance) {
+        super(distance);
+    }
+    @Override
+    int calculateFare() {
+        return distance * 5;
+    }
+}
+class TrainTicket extends Ticket {
+    TrainTicket(int distance) {
+        super(distance);
+    }
+    @Override
+    int calculateFare() {
+        return distance * 8;
+    }
+}
+class FlightTicket extends Ticket {
+    FlightTicket(int distance) {
+        super(distance);
+    }
+    @Override
+    int calculateFare() {
+        return distance * 15;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String type = sc.nextLine().toLowerCase();
+        int distance = sc.nextInt();
+        Ticket ticket;
+        String displayType = "";
+        if (type.equals("bus")) {
+            ticket = new BusTicket(distance);
+            displayType = "Bus Ticket";
+        } else if (type.equals("train")) {
+            ticket = new TrainTicket(distance);
+            displayType = "Train Ticket";
+        } else {
+            ticket = new FlightTicket(distance);
+            displayType = "Flight Ticket";
+        }
+        System.out.println("Ticket Type: " + displayType);
+        System.out.println("Fare: " + ticket.calculateFare());
+    }
+}

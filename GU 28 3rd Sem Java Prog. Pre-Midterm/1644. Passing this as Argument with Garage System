@@ -1,0 +1,49 @@
+import java.util.*;
+class Car {
+    private String brand;
+    private String model;
+
+    Car(String brand, String model) {
+        this.brand = brand;
+        this.model = model;
+    }
+    public void park(Garage garage) {
+        garage.parkCar(this);
+    }
+    public String getBrand() {
+        return brand;
+    }
+    public String getModel() {
+        return model;
+    }
+}
+class Garage {
+    private List<Car> parkedCars = new ArrayList<>();
+    public void parkCar(Car car) {
+        parkedCars.add(car);
+        int slot = parkedCars.size();
+        System.out.println("Car " + car.getBrand() + " " + car.getModel() + " has been parked in slot #" + slot);
+    }
+    public void showGarageStatus() {
+        System.out.println("\n--- Garage Status ---");
+        for (int i = 0; i < parkedCars.size(); i++) {
+            Car car = parkedCars.get(i);
+            System.out.println("Slot " + (i + 1) + ": " + car.getBrand() + " " + car.getModel());
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Garage garage = new Garage();
+        int n = sc.nextInt();
+        sc.nextLine();
+        for (int i = 0; i < n; i++) {
+            String brand = sc.nextLine();
+            String model = sc.nextLine();
+            Car car = new Car(brand, model);
+            car.park(garage);
+        }
+        garage.showGarageStatus();
+    }
+}

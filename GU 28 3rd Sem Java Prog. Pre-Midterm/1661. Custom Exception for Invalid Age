@@ -1,0 +1,20 @@
+import java.util.*;
+class InvalidAgeException extends Exception {
+    InvalidAgeException() {
+        super("Invalid Age: must be 18 or above");
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int age = sc.nextInt();
+        try {
+            if (age < 18) {
+                throw new InvalidAgeException();
+            }
+            System.out.println("Eligible to Vote");
+        } catch (InvalidAgeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

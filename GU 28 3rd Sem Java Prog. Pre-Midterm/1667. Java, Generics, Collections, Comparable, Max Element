@@ -1,0 +1,25 @@
+import java.util.*;
+class MaxFinder<T extends Comparable<T>> {
+    public T findMax(List<T> list) {
+        if (list == null || list.isEmpty()) return null;
+        T max = list.get(0);
+        for (T item : list) {
+            if (item.compareTo(max) > 0) {
+                max = item;
+            }
+        }
+        return max;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            list.add(sc.nextInt());
+        }
+        MaxFinder<Integer> maxFinder = new MaxFinder<>();
+        System.out.println("Maximum: " + maxFinder.findMax(list));
+    }
+}

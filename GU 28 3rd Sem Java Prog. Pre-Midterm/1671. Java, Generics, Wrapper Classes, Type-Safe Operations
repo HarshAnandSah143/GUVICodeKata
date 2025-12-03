@@ -1,0 +1,22 @@
+import java.util.*;
+class GenericSum<T extends Number> {
+    public double sum(List<T> list) {
+        double total = 0;
+        for (T item : list) {
+            total += item.doubleValue();
+        }
+        return total;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Double> numbers = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            numbers.add(sc.nextDouble());
+        }
+        GenericSum<Double> gs = new GenericSum<>();
+        System.out.println("Sum: " + gs.sum(numbers));
+    }
+}
