@@ -1,0 +1,180 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct File {
+    char name[101];
+    int size;
+    struct File* next;
+} File;
+typedef struct Directory {
+    char name[101];
+    struct File* files;
+    struct Directory* subdirs;
+    struct Directory* next;
+} Directory;
+File* createFile(const char* name, int size) {
+    File* newFile = (File*)malloc(sizeof(File));
+    strcpy(newFile->name, name);
+    newFile->size = size;
+    newFile->next = NULL;
+    return newFile;
+}
+Directory* createDirectory(const char* name) {
+    Directory* newDir = (Directory*)malloc(sizeof(Directory));
+    strcpy(newDir->name, name);
+    newDir->files = NULL;
+    newDir->subdirs = NULL;
+    newDir->next = NULL;
+    return newDir;
+}
+void addSubdirectory(Directory* parent, const char* newDirName) {
+    Directory* newDir = createDirectory(newDirName);
+    if (!parent->subdirs || strcmp(newDirName, parent->subdirs->name) < 0) {
+        newDir->next = parent->subdirs;
+        parent->subdirs = newDir;
+        return;
+    }
+    Directory* current = parent->subdirs;
+    while (current->next && strcmp(current->next->name, newDirName) < 0) {
+        current = current->next;
+    }
+    newDir->next = current->next;
+    current->next = newDir;
+}
+Directory* findDirectory(Directory* dir, const char* name) {
+    if (strcmp(dir->name, name) == 0) {
+        return dir;
+    }
+    Directory* current = dir->subdirs;
+    while (current) {
+        Directory* found = findDirectory(current, name);
+        if (found) return found;
+        current = current->next;
+    }
+    return NULL;
+}
+void addFile(Directory* dir, const char* fileName, int size) {
+    File* newFile = createFile(fileName, size);
+    if (!dir->files || strcmp(fileName, dir->files->name) < 0) {
+        newFile->next = dir->files;
+        dir->files = newFile;
+        return;
+    }
+    File* current = dir->files;
+    while (current->next && strcmp(current->next->name, fileName) < 0) {
+        current = current->next;
+    }
+    newFile->next = current->next;
+    current->next = newFile;
+}
+void updateFile(Directory* dir, const char* fileName, int newSize) {
+    File* current = dir->files;
+    while (current) {
+        if (strcmp(current->name, fileName) == 0) {
+            current->size = newSize;
+            return;
+        }
+        current = current->next;
+    }
+    printf("Error: File not found\n");
+}
+void deleteFile(Directory* dir, const char* fileName) {
+    File* current = dir->files;
+    File* prev = NULL;
+    while (current) {
+        if (strcmp(current->name, fileName) == 0) {
+            if (prev) {
+                prev->next = current->next;
+            } else {
+                dir->files = current->next;
+            }
+            free(current);
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+    printf("Error: File not found\n");
+}
+void listDirectory(Directory* dir) {
+    int printed = 0;
+    File* currentFile = dir->files;
+    while (currentFile) {
+        printf("%s\n", currentFile->name);
+        printed = 1;
+        currentFile = currentFile->next;
+    }
+    Directory* currentDir = dir->subdirs;
+    while (currentDir) {
+        printf("%s/\n", currentDir->name);
+        printed = 1;
+        currentDir = currentDir->next;
+    }
+    if (!printed) {
+        printf("Nil\n");
+    }
+}
+int calculateTotalSize(Directory* dir) {
+    int totalSize = 0;
+    File* currentFile = dir->files;
+    while (currentFile) {
+        totalSize += currentFile->size;
+        currentFile = currentFile->next;
+    }
+    Directory* currentSubdir = dir->subdirs;
+    while (currentSubdir) {
+        totalSize += calculateTotalSize(currentSubdir);
+        currentSubdir = currentSubdir->next;
+    }
+    return totalSize;
+}
+int main() {
+    int n;
+    if (scanf("%d", &n) != 1) return 0;
+    Directory* root = createDirectory("root");
+    for (int i = 0; i < n; i++) {
+        int operation;
+        if (scanf("%d", &operation) != 1) break;
+        if (operation == 1) {
+            char parentDir[101], newDir[101];
+            if (scanf("%s %s", parentDir, newDir) != 2) break;
+            Directory* parent = findDirectory(root, parentDir);
+            if (parent) addSubdirectory(parent, newDir);
+        }
+        else if (operation == 2) {
+            char dirName[101], fileName[101];
+            int fileSize;
+            if (scanf("%s %s %d", dirName, fileName, &fileSize) != 3) break;
+            Directory* dir = findDirectory(root, dirName);
+            if (dir) addFile(dir, fileName, fileSize);
+        }
+        else if (operation == 3) {
+            char dirName[101], fileName[101];
+            int newSize;
+            if (scanf("%s %s %d", dirName, fileName, &newSize) != 3) break;
+            Directory* dir = findDirectory(root, dirName);
+            if (dir) updateFile(dir, fileName, newSize);
+        }
+        else if (operation == 4) {
+            char dirName[101], fileName[101];
+            if (scanf("%s %s", dirName, fileName) != 2) break;
+            Directory* dir = findDirectory(root, dirName);
+            if (dir) deleteFile(dir, fileName);
+        }
+        else if (operation == 5) {
+            char dirName[101];
+            if (scanf("%s", dirName) != 1) break;
+            Directory* dir = findDirectory(root, dirName);
+            if (dir) listDirectory(dir);
+        }
+        else if (operation == 6) {
+            char dirName[101];
+            if (scanf("%s", dirName) != 1) break;
+            Directory* dir = findDirectory(root, dirName);
+            if (dir) {
+                printf("Total size: %d\n", calculateTotalSize(dir));
+            }
+        }
+    }
+    return 0;
+}
