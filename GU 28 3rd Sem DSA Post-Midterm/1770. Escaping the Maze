@@ -1,0 +1,53 @@
+#include <stdio.h>
+typedef struct { int x, y, d; } Node;
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    int maze[n][m];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            scanf("%d", &maze[i][j]);
+    int sx, sy, ex, ey;
+    scanf("%d %d %d %d", &sx, &sy, &ex, &ey);
+    int visited[n][m];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            visited[i][j] = 0;
+    Node q[n*m];
+    int f = 0, r = 0;
+    if (maze[sx][sy] == 0) {
+        printf("-1");
+        return 0;
+    }
+    q[r++] = (Node){sx, sy, 0};
+    visited[sx][sy] = 1;
+    int ans = -1;
+    while (f < r) {
+        Node cur = q[f++];
+        if (cur.x == ex && cur.y == ey) {
+            ans = cur.d;
+            break;
+        }
+        int k = maze[cur.x][cur.y];
+        int nx, ny;
+        int moves[4][2] = {
+            {cur.x + k, cur.y},
+            {cur.x - k, cur.y},
+            {cur.x, cur.y + k},
+            {cur.x, cur.y - k}
+        };
+        for (int i = 0; i < 4; i++) {
+            nx = moves[i][0];
+            ny = moves[i][1];
+            if (nx >= 0 && nx < n && ny >= 0 && ny < m &&
+               (!visited[nx][ny]) &&
+               (maze[nx][ny] != 0 || (nx == ex && ny == ey))) 
+            {
+                visited[nx][ny] = 1;
+                q[r++] = (Node){nx, ny, cur.d + 1};
+            }
+        }
+    }
+    printf("%d", ans);
+    return 0;
+}

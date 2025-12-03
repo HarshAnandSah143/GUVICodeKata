@@ -1,0 +1,183 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define NAME 105
+struct File {
+    char name[NAME];
+    long long size;
+    struct File* next;
+};
+struct Dir {
+    char name[NAME];
+    struct File* files;
+    struct Dir* subdirs;
+    struct Dir* next;
+};
+struct Dir* root;
+struct Dir* findDir(struct Dir* curr, char* name) {
+    if (!curr) return NULL;
+    if (strcmp(curr->name, name) == 0) return curr;
+    struct Dir* child = curr->subdirs;
+    while (child) {
+        struct Dir* found = findDir(child, name);
+        if (found) return found;
+        child = child->next;
+    }
+    return NULL;
+}
+void createDirectory(char* parent, char* newdir) {
+    struct Dir* p = findDir(root, parent);
+    if (!p) {
+        printf("Directory not found\n");
+        return;
+    }
+    struct Dir* d = (struct Dir*)malloc(sizeof(struct Dir));
+    strcpy(d->name, newdir);
+    d->files = NULL;
+    d->subdirs = NULL;
+    d->next = p->subdirs;
+    p->subdirs = d;
+}
+void createFile(char* dirname, char* filename, long long size) {
+    struct Dir* d = findDir(root, dirname);
+    if (!d) {
+        printf("Directory not found\n");
+        return;
+    }
+    struct File* f = (struct File*)malloc(sizeof(struct File));
+    strcpy(f->name, filename);
+    f->size = size;
+    f->next = d->files;
+    d->files = f;
+}
+void updateFile(char* dirname, char* filename, long long newsize) {
+    struct Dir* d = findDir(root, dirname);
+    if (!d) {
+        printf("Directory not found\n");
+        return;
+    }
+    struct File* f = d->files;
+    while (f) {
+        if (strcmp(f->name, filename) == 0) {
+            f->size = newsize;
+            return;
+        }
+        f = f->next;
+    }
+    printf("File not found\n");
+}
+void deleteFile(char* dirname, char* filename) {
+    struct Dir* d = findDir(root, dirname);
+    if (!d) {
+        printf("Directory not found\n");
+        return;
+    }
+    struct File* f = d->files;
+    struct File* prev = NULL;
+    while (f) {
+        if (strcmp(f->name, filename) == 0) {
+            if (prev) prev->next = f->next;
+            else d->files = f->next;
+            free(f);
+            return;
+        }
+        prev = f;
+        f = f->next;
+    }
+    printf("File not found\n");
+}
+char listArr[200005][NAME];
+int listCount;
+void collectNames(struct Dir* d) {
+    listCount = 0;
+    struct File* f = d->files;
+    while (f) {
+        strcpy(listArr[listCount++], f->name);
+        f = f->next;
+    }
+    struct Dir* sd = d->subdirs;
+    while (sd) {
+        strcpy(listArr[listCount++], sd->name);
+        sd = sd->next;
+    }
+}
+void printDirectory(char* dirname) {
+    struct Dir* d = findDir(root, dirname);
+    if (!d) {
+        printf("Directory not found\n");
+        return;
+    }
+    collectNames(d);
+    qsort(listArr, listCount, NAME, (int (*)(const void*, const void*))strcmp);
+    for (int i = 0; i < listCount; i++) {
+        printf("%s\n", listArr[i]);
+    }
+}
+long long computeSize(struct Dir* d) {
+    long long total = 0;
+    struct File* f = d->files;
+    while (f) {
+        total += f->size;
+        f = f->next;
+    }
+    struct Dir* sd = d->subdirs;
+    while (sd) {
+        total += computeSize(sd);
+        sd = sd->next;
+    }
+    return total;
+}
+void printSize(char* dirname) {
+    struct Dir* d = findDir(root, dirname);
+    if (!d) {
+        printf("Directory not found\n");
+        return;
+    }
+    printf("Total size: %lld\n", computeSize(d));
+}
+int main() {
+    root = (struct Dir*)malloc(sizeof(struct Dir));
+    strcpy(root->name, "root");
+    root->files = NULL;
+    root->subdirs = NULL;
+    root->next = NULL;
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        int op;
+        scanf("%d", &op);
+        if (op == 1) {
+            char parent[NAME], newdir[NAME];
+            scanf("%s %s", parent, newdir);
+            createDirectory(parent, newdir);
+        }
+        else if (op == 2) {
+            char dirname[NAME], filename[NAME];
+            long long size;
+            scanf("%s %s %lld", dirname, filename, &size);
+            createFile(dirname, filename, size);
+        }
+        else if (op == 3) {
+            char dirname[NAME], filename[NAME];
+            long long newsize;
+            scanf("%s %s %lld", dirname, filename, &newsize);
+            updateFile(dirname, filename, newsize);
+        }
+        else if (op == 4) {
+            char dirname[NAME], filename[NAME];
+            scanf("%s %s", dirname, filename);
+            deleteFile(dirname, filename);
+        }
+        else if (op == 5) {
+            char dirname[NAME];
+            scanf("%s", dirname);
+            printDirectory(dirname);
+        }
+        else if (op == 6) {
+            char dirname[NAME];
+            scanf("%s", dirname);
+            printSize(dirname);
+        }
+    }
+    return 0;
+}

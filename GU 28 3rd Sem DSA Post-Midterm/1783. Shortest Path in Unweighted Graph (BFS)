@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    int* adj[n];
+    int size[n];
+    for (int i = 0; i < n; i++) {
+        adj[i] = NULL;
+        size[i] = 0;
+    }
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        adj[u] = realloc(adj[u], (size[u] + 1) * sizeof(int));
+        adj[u][size[u]++] = v;
+        adj[v] = realloc(adj[v], (size[v] + 1) * sizeof(int));
+        adj[v][size[v]++] = u;
+    }
+    int s, d;
+    scanf("%d %d", &s, &d);
+    int visited[n], parent[n];
+    for (int i = 0; i < n; i++) visited[i] = 0, parent[i] = -1;
+    int queue[n];
+    int front = 0, rear = 0;
+    queue[rear++] = s;
+    visited[s] = 1;
+    while (front < rear) {
+        int v = queue[front++];
+        if (v == d) break;
+        for (int i = 0; i < size[v]; i++) {
+            int nxt = adj[v][i];
+            if (!visited[nxt]) {
+                visited[nxt] = 1;
+                parent[nxt] = v;
+                queue[rear++] = nxt;
+            }
+        }
+    }
+    if (!visited[d]) {
+        printf("No Path");
+        return 0;
+    }
+    int path[n], idx = 0;
+    for (int cur = d; cur != -1; cur = parent[cur])
+        path[idx++] = cur;
+    for (int i = idx - 1; i >= 0; i--) {
+        printf("%d", path[i]);
+        if (i > 0) printf(" ");
+    }
+    return 0;
+}

@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+int main() {
+    char expr[1005];
+    scanf("%s", expr);
+    char stack[1005];
+    int top = -1;
+    for (int i = 0; expr[i] != '\0'; i++) {
+        char ch = expr[i];
+        if (ch == '(' || ch == '{' || ch == '[') {
+            stack[++top] = ch;
+        }
+        else if (ch == ')' || ch == '}' || ch == ']') {
+            if (top == -1) {     // stack empty → mismatch
+                printf("Not Balanced");
+                return 0;
+            }
+            char topChar = stack[top--];
+            if ((ch == ')' && topChar != '(') ||
+                (ch == '}' && topChar != '{') ||
+                (ch == ']' && topChar != '[')) {
+                printf("Not Balanced");
+                return 0;
+            }
+        }
+    }
+    if (top == -1)
+        printf("Balanced");
+    else
+        printf("Not Balanced");
+    return 0;
+}

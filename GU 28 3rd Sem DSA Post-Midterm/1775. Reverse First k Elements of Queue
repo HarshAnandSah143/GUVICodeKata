@@ -1,0 +1,24 @@
+#include <stdio.h>
+int main() {
+    int n;
+    scanf("%d", &n);
+    int queue[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &queue[i]);
+    }
+    int k;
+    scanf("%d", &k);
+    int stack[k];
+    int top = -1;
+    for (int i = 0; i < k; i++) {
+        stack[++top] = queue[i];
+    }
+    for (int i = 0; i < k; i++) {
+        queue[i] = stack[top--];
+    }
+    for (int i = 0; i < n; i++) {
+        printf("%d", queue[i]);
+        if (i < n - 1) printf(" ");
+    }
+    return 0;
+}

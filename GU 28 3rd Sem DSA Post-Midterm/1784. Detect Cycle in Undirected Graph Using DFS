@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+int cycle = 0;
+void dfs(int v, int parent, int visited[], int* adj[], int size[]) {
+    visited[v] = 1;
+    for (int i = 0; i < size[v]; i++) {
+        int nxt = adj[v][i];
+        if (!visited[nxt]) {
+            dfs(nxt, v, visited, adj, size);
+        } else if (nxt != parent) {
+            cycle = 1;
+        }
+    }
+}
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    int* adj[n];
+    int size[n];
+    for (int i = 0; i < n; i++) {
+        adj[i] = NULL;
+        size[i] = 0;
+    }
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        adj[u] = realloc(adj[u], (size[u] + 1) * sizeof(int));
+        adj[u][size[u]++] = v;
+        adj[v] = realloc(adj[v], (size[v] + 1) * sizeof(int));
+        adj[v][size[v]++] = u;
+    }
+    int visited[n];
+    for (int i = 0; i < n; i++) visited[i] = 0;
+    for (int i = 0; i < n && !cycle; i++) {
+        if (!visited[i]) {
+            dfs(i, -1, visited, adj, size);
+        }
+    }
+    if (cycle)
+        printf("Cycle Found");
+    else
+        printf("No Cycle");
+    return 0;
+}

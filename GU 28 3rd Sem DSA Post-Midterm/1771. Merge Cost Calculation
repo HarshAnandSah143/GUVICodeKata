@@ -1,0 +1,54 @@
+#include <stdio.h>
+void heapifyUp(long long heap[], int idx) {
+    while (idx > 1) {
+        int parent = idx / 2;
+        if (heap[parent] <= heap[idx]) break;
+        long long temp = heap[parent];
+        heap[parent] = heap[idx];
+        heap[idx] = temp;
+        idx = parent;
+    }
+}
+void heapifyDown(long long heap[], int size, int idx) {
+    while (1) {
+        int smallest = idx;
+        int left = 2 * idx;
+        int right = 2 * idx + 1;
+        if (left <= size && heap[left] < heap[smallest])
+            smallest = left;
+        if (right <= size && heap[right] < heap[smallest])
+            smallest = right;
+        if (smallest == idx) break;
+        long long temp = heap[idx];
+        heap[idx] = heap[smallest];
+        heap[smallest] = temp;
+        idx = smallest;
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    long long heap[2005];
+    int size = 0;
+    for (int i = 0; i < n; i++) {
+        long long x;
+        scanf("%lld", &x);
+        heap[++size] = x;
+        heapifyUp(heap, size);
+    }
+    long long totalCost = 0;
+    while (size > 1) {
+        long long a = heap[1]; 
+        heap[1] = heap[size--];
+        heapifyDown(heap, size, 1);
+        long long b = heap[1]; 
+        heap[1] = heap[size--];
+        heapifyDown(heap, size, 1);
+        long long merged = a + b;
+        totalCost += merged;
+        heap[++size] = merged; 
+        heapifyUp(heap, size);
+    }
+    printf("%lld", totalCost);
+    return 0;
+}

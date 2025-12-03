@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+int main() {
+    char expr[1005];
+    fgets(expr, sizeof(expr), stdin);
+    int stack[1005];
+    int top = -1;
+    char *token = strtok(expr, " ");
+    while (token != NULL) {
+        if (strcmp(token, "+") == 0 ||
+            strcmp(token, "-") == 0 ||
+            strcmp(token, "*") == 0 ||
+            strcmp(token, "/") == 0) {
+            int b = stack[top--];
+            int a = stack[top--];
+            int result;
+            if (strcmp(token, "+") == 0) result = a + b;
+            else if (strcmp(token, "-") == 0) result = a - b;
+            else if (strcmp(token, "*") == 0) result = a * b;
+            else result = a / b;  
+            stack[++top] = result;
+        }
+        else {
+            stack[++top] = atoi(token);
+        }
+        token = strtok(NULL, " ");
+    }
+    printf("%d", stack[top]);
+    return 0;
+}

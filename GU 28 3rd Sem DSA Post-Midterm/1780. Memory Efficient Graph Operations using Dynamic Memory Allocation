@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int vertex;
+    struct Node* next;
+};
+void addEdge(struct Node* adj[], int u, int v) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->vertex = v;
+    newNode->next = adj[u];
+    adj[u] = newNode;
+    newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->vertex = u;
+    newNode->next = adj[v];
+    adj[v] = newNode;
+}
+void dfs(int v, int visited[], struct Node* adj[]) {
+    visited[v] = 1;
+    struct Node* temp = adj[v];
+    while (temp != NULL) {
+        if (!visited[temp->vertex])
+            dfs(temp->vertex, visited, adj);
+        temp = temp->next;
+    }
+}
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    struct Node** adj = (struct Node**)malloc((n + 1) * sizeof(struct Node*));
+    int* visited = (int*)calloc(n + 1, sizeof(int));
+    for (int i = 1; i <= n; i++)
+        adj[i] = NULL;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        addEdge(adj, u, v);
+    }
+    int components = 0;
+    for (int i = 1; i <= n; i++) {
+        if (!visited[i]) {
+            components++;
+            dfs(i, visited, adj);
+        }
+    }
+    printf("%d", components);
+    for (int i = 1; i <= n; i++) {
+        struct Node* temp = adj[i];
+        while (temp != NULL) {
+            struct Node* del = temp;
+            temp = temp->next;
+            free(del);
+        }
+    }
+    free(adj);
+    free(visited);
+    return 0;
+}
