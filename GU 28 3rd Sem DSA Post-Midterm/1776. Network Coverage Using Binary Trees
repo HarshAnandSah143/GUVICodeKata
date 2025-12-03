@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct Node {
+    int data;
+    struct Node *left, *right;
+} Node;
+Node* createNode(int val) {
+    Node* t = (Node*)malloc(sizeof(Node));
+    t->data = val;
+    t->left = t->right = NULL;
+    return t;
+}
+Node* insert(Node* root, int val) {
+    if (!root) return createNode(val);
+    if (val < root->data) root->left = insert(root->left, val);
+    else if (val > root->data) root->right = insert(root->right, val);
+    return root;
+}
+int find(Node* root, int val) {
+    while (root) {
+        if (val == root->data) return 1;
+        if (val < root->data) root = root->left;
+        else root = root->right;
+    }
+    return 0;
+}
+Node* findMinNode(Node* root) {
+    while (root && root->left) root = root->left;
+    return root;
+}
+Node* deleteNode(Node* root, int val, int *deleted) {
+    if (!root) return NULL;
+
+    if (val < root->data)
+        root->left = deleteNode(root->left, val, deleted);
+    else if (val > root->data)
+        root->right = deleteNode(root->right, val, deleted);
+    else {
+        *deleted = 1;
+        if (!root->left && !root->right) {
+            free(root);
+            return NULL;
+        }
+        else if (!root->left) {
+            Node* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (!root->right) {
+            Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+        else {
+            Node* temp = findMinNode(root->right);
+            root->data = temp->data;
+            root->right = deleteNode(root->right, temp->data, deleted);
+        }
+    }
+    return root;
+}
+void inorder(Node* root, int *firstPrinted) {
+    if (!root) return;
+    inorder(root->left, firstPrinted);
+
+    if (*firstPrinted)
+        printf(" ");
+    printf("%d", root->data);
+    *firstPrinted = 1;
+
+    inorder(root->right, firstPrinted);
+}
+int main() {
+    int N;
+    scanf("%d", &N);
+    Node* root = NULL;
+    while (N--) {
+        char op[20];
+        int x;
+        scanf("%s", op);
+
+        if (strcmp(op, "INSERT") == 0) {
+            scanf("%d", &x);
+            root = insert(root, x);
+        }
+        else if (strcmp(op, "DELETE") == 0) {
+            scanf("%d", &x);
+            int deleted = 0;
+            root = deleteNode(root, x, &deleted);
+            if (!deleted)
+                printf("Tower not found\n");
+        }
+        else if (strcmp(op, "MIN") == 0) {
+            if (root) {
+                Node* t = findMinNode(root);
+                printf("%d\n", t->data);
+            }
+        }
+        else if (strcmp(op, "MAX") == 0) {
+            Node* t = root;
+            while (t && t->right) t = t->right;
+            if (t) printf("%d\n", t->data);
+        }
+        else if (strcmp(op, "FIND") == 0) {
+            scanf("%d", &x);
+            if (find(root, x)) printf("Found\n");
+            else printf("Not Found\n");
+        }
+        else if (strcmp(op, "PRINT") == 0) {
+            int firstPrinted = 0;
+            inorder(root, &firstPrinted);
+            printf("\n");
+        }
+    }
+    return 0;
+}
