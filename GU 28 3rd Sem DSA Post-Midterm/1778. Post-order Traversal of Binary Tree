@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
+typedef struct Queue {
+    Node** arr;
+    int front;
+    int rear;
+    int size;
+} Queue;
+Node* createNode(int data) {
+    if (data == -1) return NULL;
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->data = data;
+    node->left = node->right = NULL;
+    return node;
+}
+Queue* createQueue(int n) {
+    Queue* q = (Queue*)malloc(sizeof(Queue));
+    q->arr = (Node**)malloc(n * sizeof(Node*));
+    q->front = 0;
+    q->rear = 0;
+    q->size = n;
+    return q;
+}
+void enqueue(Queue* q, Node* node) {
+    if (q->rear < q->size) q->arr[q->rear++] = node;
+}
+Node* dequeue(Queue* q) {
+    if (q->front < q->rear) return q->arr[q->front++];
+    return NULL;
+}
+void freeQueue(Queue* q) {
+    free(q->arr);
+    free(q);
+}
+void postOrder(Node* root, int* first) {
+    if (!root) return;
+    postOrder(root->left, first);
+    postOrder(root->right, first);
+    if (*first) { printf("%d", root->data); *first = 0; }
+    else printf(" %d", root->data);
+}
+void freeTree(Node* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root);
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    int* arr = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
+    if (n == 0) return 0;
+    Node* root = createNode(arr[0]);
+    Queue* q = createQueue(n);
+    enqueue(q, root);
+    int i = 1;
+    while (i < n) {
+        Node* curr = dequeue(q);
+        if (!curr) continue;
+        curr->left = createNode(arr[i++]);
+        if (curr->left) enqueue(q, curr->left);
+        if (i >= n) break;
+        curr->right = createNode(arr[i++]);
+        if (curr->right) enqueue(q, curr->right);
+    }
+    int first = 1;
+    postOrder(root, &first);
+    printf("\n");
+    freeTree(root);
+    freeQueue(q);
+    free(arr);
+    return 0;
+}
