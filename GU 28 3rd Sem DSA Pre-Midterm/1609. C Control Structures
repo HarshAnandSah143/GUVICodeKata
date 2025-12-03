@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX_BOOKS 100
+#define MAX_TITLE_LENGTH 50
+typedef struct {
+    int id;
+    char title[MAX_TITLE_LENGTH];
+} Book;
+Book library[MAX_BOOKS];
+int bookCount = 0;
+void addBook() {
+    if (bookCount >= MAX_BOOKS) {
+        printf("Library is full, cannot add more books.\n");
+        return;
+    }
+    int id;
+    char title[MAX_TITLE_LENGTH];
+    if (scanf("%d", &id) != 1) return;
+    for (int i = 0; i < bookCount; i++) {
+        if (library[i].id == id) {
+            printf("Book ID must be unique. Book not added.\n");
+            return;
+        }
+    }
+    getchar();
+    if (fgets(title, MAX_TITLE_LENGTH, stdin) == NULL) return;
+
+    title[strcspn(title, "\n")] = 0;
+    library[bookCount].id = id;
+    strcpy(library[bookCount].title, title);
+    bookCount++;
+
+    printf("Book added successfully.\n");
+}
+void searchBookById() {
+    int id;
+    if (scanf("%d", &id) != 1) return;
+    for (int i = 0; i < bookCount; i++) {
+        if (library[i].id == id) {
+            printf("Book found: ID=%d, Title=\"%s\"\n", library[i].id, library[i].title);
+            return;
+        }
+    }
+    printf("Book not found.\n");
+}
+void deleteBookById() {
+    int id;
+    if (scanf("%d", &id) != 1) return;
+    for (int i = 0; i < bookCount; i++) {
+        if (library[i].id == id) {
+            for (int j = i; j < bookCount - 1; j++) {
+                library[j] = library[j + 1];
+            }
+            bookCount--;
+            printf("Book deleted successfully.\n");
+            return;
+        }
+    }
+    printf("Book ID not found.\n");
+}
+void displayAllBooks() {
+    if (bookCount == 0) {
+        printf("No books in the library.\n");
+        return;
+    }
+    for (int i = 0; i < bookCount; i++) {
+        printf("Book ID=%d, Title=\"%s\"\n", library[i].id, library[i].title);
+    }
+}
+int main() {
+    int choice;
+    while (scanf("%d", &choice) == 1) {  // loop until EOF
+        switch (choice) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                searchBookById();
+                break;
+            case 3:
+                deleteBookById();
+                break;
+            case 4:
+                displayAllBooks();
+                break;
+            case 5:
+                return 0;
+            default:
+                printf("Invalid option.\n");
+        }
+    }
+    return 0;
+}
