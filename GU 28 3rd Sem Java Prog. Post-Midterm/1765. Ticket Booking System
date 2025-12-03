@@ -1,0 +1,63 @@
+import java.util.*;
+class TicketCounter {
+    private int availableSeats;
+
+    public TicketCounter(int seats) {
+        this.availableSeats = seats;
+    }
+    public synchronized boolean bookTickets(int userId, int tickets) {
+        if (tickets <= availableSeats) {
+            availableSeats -= tickets;
+            System.out.println("User" + userId + " booked " + tickets + " tickets.");
+            return true;
+        } else {
+            System.out.println(
+                "User" + userId + " could not book (only " + availableSeats + " left)."
+            );
+            return false;
+        }
+    }
+    public int getRemainingSeats() {
+        return availableSeats;
+    }
+}
+class BookingThread extends Thread {
+    private TicketCounter counter;
+    private int userId;
+    private int tickets;
+    public BookingThread(TicketCounter counter, int userId, int tickets) {
+        this.counter = counter;
+        this.userId = userId;
+        this.tickets = tickets;
+    }
+    @Override
+    public void run() {
+        counter.bookTickets(userId, tickets);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int totalSeats = sc.nextInt();
+        int requests = sc.nextInt();
+        int[] bookings = new int[requests];
+        for (int i = 0; i < requests; i++) {
+            bookings[i] = sc.nextInt();
+        }
+        sc.close();
+        TicketCounter counter = new TicketCounter(totalSeats);
+        Thread[] threads = new Thread[requests];
+        for (int i = 0; i < requests; i++) {
+            threads[i] = new BookingThread(counter, i + 1, bookings[i]);
+            threads[i].start();
+        }
+        for (int i = 0; i < requests; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Remaining Seats: " + counter.getRemainingSeats());
+    }
+}

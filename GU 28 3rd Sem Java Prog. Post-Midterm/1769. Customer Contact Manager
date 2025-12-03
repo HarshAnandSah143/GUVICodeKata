@@ -1,0 +1,53 @@
+import java.util.*;
+class Contact {
+    int id;
+    String name;
+    String email;
+    String phone;
+    Contact(int id, String name, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        if (!sc.hasNext()) return;
+        String op = sc.next();
+        Map<Integer, Contact> db = new LinkedHashMap<>();
+        if (op.equals("insert")) {
+            int id = sc.nextInt();
+            String name = sc.next();
+            String email = sc.next();
+            String phone = sc.next();
+            db.put(id, new Contact(id, name, email, phone));
+            System.out.println("Contact inserted successfully.");
+        } else if (op.equals("update")) {
+            int id = sc.nextInt();
+            String field = sc.next();
+            String value = sc.next();
+            Contact c = db.get(id);
+            if (c != null) {
+                if (field.equals("email")) c.email = value;
+                else if (field.equals("phone")) c.phone = value;
+                System.out.println("Contact updated successfully.");
+            } else {
+                System.out.println("Contact not found.");
+            }
+        } else if (op.equals("delete")) {
+            int id = sc.nextInt();
+            if (db.containsKey(id)) {
+                db.remove(id);
+                System.out.println("Contact deleted successfully.");
+            } else {
+                System.out.println("Contact not found.");
+            }
+        } else if (op.equals("display")) {
+            for (Contact c : db.values()) {
+                System.out.println(c.id + " " + c.name + " " + c.email + " " + c.phone);
+            }
+        }
+    }
+}

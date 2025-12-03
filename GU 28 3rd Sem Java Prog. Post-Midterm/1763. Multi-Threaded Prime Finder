@@ -1,0 +1,53 @@
+import java.util.*;
+class PrimeFinder extends Thread {
+    int start, end;
+    List<Integer> list;
+    public PrimeFinder(int s, int e, List<Integer> list) {
+        this.start = s;
+        this.end = e;
+        this.list = list;
+    }
+    boolean isPrime(int n) {
+        if (n < 2) return false;
+        if (n == 2) return true;
+        if (n % 2 == 0) return false;
+        for (int i = 3; i * i <= n; i += 2)
+            if (n % i == 0) return false;
+        return true;
+    }
+    public void run() {
+        for (int i = start; i <= end; i++) {
+            if (isPrime(i)) {
+                synchronized(list) {
+                    list.add(i);
+                }
+            }
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int start = sc.nextInt();
+        int end = sc.nextInt();
+        int t = sc.nextInt();
+        List<Integer> primes = Collections.synchronizedList(new ArrayList<>());
+        PrimeFinder[] threads = new PrimeFinder[t];
+        int total = end - start + 1;
+        int size = total / t;
+        int extra = total % t;
+        int current = start;
+        for (int i = 0; i < t; i++) {
+            int segment = size + (i < extra ? 1 : 0);
+            int s = current;
+            int e = current + segment - 1;
+            current = e + 1;
+            threads[i] = new PrimeFinder(s, e, primes);
+            threads[i].start();
+        }
+        for (int i = 0; i < t; i++)
+            threads[i].join();
+        Collections.sort(primes);
+        System.out.println("Primes: " + primes);
+    }
+}

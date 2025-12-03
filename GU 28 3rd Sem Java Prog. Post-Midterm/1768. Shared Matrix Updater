@@ -1,0 +1,35 @@
+import java.util.*;
+class SharedMatrix {
+    int[][] mat;
+    public SharedMatrix(int r, int c) {
+        mat = new int[r][c];
+    }
+    public synchronized void updateRow(int row, int val) {
+        for (int i = 0; i < mat[row].length; i++)
+            mat[row][i] = val;
+    }
+    public void printMatrix() {
+        for (int i = 0; i < mat.length; i++) {
+            System.out.print("[");
+            for (int j = 0; j < mat[i].length; j++) {
+                System.out.print(mat[i][j]);
+                if (j < mat[i].length - 1) System.out.print(", ");
+            }
+            System.out.println("]");
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int r = sc.nextInt();
+        int c = sc.nextInt();
+        SharedMatrix sm = new SharedMatrix(r, c);
+        while (sc.hasNextInt()) {
+            int row = sc.nextInt();
+            int val = sc.nextInt();
+            sm.updateRow(row, val);
+        }
+        sm.printMatrix();
+    }
+}

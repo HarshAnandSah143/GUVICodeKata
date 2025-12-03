@@ -1,0 +1,42 @@
+import java.util.*;
+class SumThread extends Thread {
+    int[] arr;
+    int start, end;
+    static long total = 0;
+    public SumThread(int[] arr, int start, int end) {
+        this.arr = arr;
+        this.start = start;
+        this.end = end;
+    }
+    public void run() {
+        long s = 0;
+        for (int i = start; i < end; i++)
+            s += arr[i];
+        synchronized (SumThread.class) {
+            total += s;
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++)
+            arr[i] = sc.nextInt();
+        int t = sc.nextInt();
+        SumThread[] threads = new SumThread[t];
+        int size = n / t;
+        int extra = n % t;
+        int idx = 0;
+        for (int i = 0; i < t; i++) {
+            int seg = size + (i < extra ? 1 : 0);
+            threads[i] = new SumThread(arr, idx, idx + seg);
+            idx += seg;
+            threads[i].start();
+        }
+        for (int i = 0; i < t; i++)
+            threads[i].join();
+        System.out.println("Total Sum: " + SumThread.total);
+    }
+}

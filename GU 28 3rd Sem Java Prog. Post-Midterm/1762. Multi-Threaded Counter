@@ -1,0 +1,39 @@
+import java.util.*;
+class Counter {
+    private int value = 0;
+    public synchronized void increment() {
+        value++;
+    }
+    public int getValue() {
+        return value;
+    }
+}
+class Worker extends Thread {
+    Counter c;
+    int times;
+    public Worker(Counter c, int times) {
+        this.c = c;
+        this.times = times;
+    }
+    public void run() {
+        for (int i = 0; i < times; i++) {
+            c.increment();
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        Counter c = new Counter();
+        Worker[] t = new Worker[n];
+        for (int i = 0; i < n; i++) {
+            t[i] = new Worker(c, m);
+            t[i].start();
+        }
+        for (int i = 0; i < n; i++)
+            t[i].join();
+        System.out.println("Final Counter: " + c.getValue());
+    }
+}
