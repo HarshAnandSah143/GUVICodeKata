@@ -1,0 +1,17 @@
+#include <stdio.h>
+void printNumbers(int n) {
+    if (n == 0) {
+        return; 
+    }
+    printNumbers(n - 1); 
+    if(n==1) 
+        printf("%d", n);
+    else
+        printf(" %d", n); 
+}
+int main() {
+    int N;
+    scanf("%d", &N); 
+    printNumbers(N);
+    return 0;
+}

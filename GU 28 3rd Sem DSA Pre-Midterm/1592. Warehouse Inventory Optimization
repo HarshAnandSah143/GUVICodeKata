@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+int main() {
+    int L, W, H;
+    scanf("%d %d %d", &L, &W, &H);
+    int ***grid = (int ***)malloc(L * sizeof(int **));
+    for (int i = 0; i < L; i++) {
+        grid[i] = (int **)malloc(W * sizeof(int *));
+        for (int j = 0; j < W; j++) {
+            grid[i][j] = (int *)malloc(H * sizeof(int));
+        }
+    }
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < W; j++) {
+            for (int k = 0; k < H; k++) {
+                scanf("%d", &grid[i][j][k]);
+            }
+        }
+    }
+    int ***prefix = (int ***)malloc((L + 1) * sizeof(int **));
+    for (int i = 0; i <= L; i++) {
+        prefix[i] = (int **)malloc((W + 1) * sizeof(int *));
+        for (int j = 0; j <= W; j++) {
+            prefix[i][j] = (int *)malloc((H + 1) * sizeof(int));
+            for (int k = 0; k <= H; k++) {
+                prefix[i][j][k] = 0;
+            }
+        }
+    }
+    for (int i = 1; i <= L; i++) {
+        for (int j = 1; j <= W; j++) {
+            for (int k = 1; k <= H; k++) {
+                prefix[i][j][k] = grid[i-1][j-1][k-1] +
+                                prefix[i-1][j][k] +
+                                prefix[i][j-1][k] +
+                                prefix[i][j][k-1] -
+                                prefix[i-1][j-1][k] -
+                                prefix[i-1][j][k-1] -
+                                prefix[i][j-1][k-1] +
+                                prefix[i-1][j-1][k-1];
+            }
+        }
+    }
+    long long maxSum = LLONG_MIN;
+    for (int x1 = 1; x1 <= L; x1++) {
+        for (int y1 = 1; y1 <= W; y1++) {
+            for (int z1 = 1; z1 <= H; z1++) {
+                for (int x2 = x1; x2 <= L; x2++) {
+                    for (int y2 = y1; y2 <= W; y2++) {
+                        for (int z2 = z1; z2 <= H; z2++) {
+                            long long sum = (long long)prefix[x2][y2][z2] - 
+                                            prefix[x1-1][y2][z2]- 
+                                            prefix[x2][y1-1][z2] -
+                                            prefix[x2][y2][z1-1] +
+                                            prefix[x1-1][y1-1][z2] +
+                                            prefix[x1-1][y2][z1-1] +
+                                            prefix[x2][y1-1][z1-1] -
+                                            prefix[x1-1][y1-1][z1-1];
+                            if (sum > maxSum) {
+                                maxSum = sum;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    printf("%lld\n", maxSum);
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < W; j++) {
+            free(grid[i][j]);
+        }
+        free(grid[i]);
+    }
+    free(grid);
+    for (int i = 0; i <= L; i++) {
+        for (int j = 0; j <= W; j++) {
+            free(prefix[i][j]);
+        }
+        free(prefix[i]);
+    }
+    free(prefix);
+    return 0;
+}

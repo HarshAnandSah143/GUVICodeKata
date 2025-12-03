@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <string.h>
+int main() {
+    int n;
+    scanf("%d", &n);
+    char words[n][100];
+    for (int i = 0; i < n; i++) {
+        scanf("%s", words[i]);
+    }
+    for (int i = 1; i < n; i++) {
+        char key[100];
+        strcpy(key, words[i]);
+        int j = i - 1;
+        while (j >= 0 && strcmp(words[j], key) > 0) {
+            strcpy(words[j + 1], words[j]);
+            j--;
+        }
+        strcpy(words[j + 1], key);
+    }
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", words[i]);
+    }
+    return 0;
+}

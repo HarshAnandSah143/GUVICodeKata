@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+double calculateTotalCost(int items[], int n) {
+    if (n == 0)
+        return 0.0;
+    return items[n - 1] + calculateTotalCost(items, n - 1);
+}
+double applyDiscount(double totalCost, int itemCount) {
+    double rate = 0.0;
+    if (itemCount >= 1 && itemCount <= 5)
+    rate = 0.05;
+    else if (itemCount >= 6 && itemCount <= 10)
+    rate = 0.10;
+    else if (itemCount > 10)
+    rate = 0.15;
+    return totalCost * (1.0 - rate);
+}
+int main(void) {
+    int N;
+    if (scanf("%d", &N) != 1)
+    return 0;
+    if (N < 1 || N > 100)
+    return 0;
+    int items[100];
+    for (int i = 0; i < N; ++i) {
+        if (scanf("%d", &items[i]) != 1)
+        return 0;
+    }
+    double total = calculateTotalCost(items, N);
+    double finalCost = applyDiscount(total, N);
+    long long v2 = (long long)(finalCost * 100.0 + 0.5);
+    long long whole = v2 / 100;
+    int rem = (int)(v2 % 100);
+    if (rem == 0) {
+        printf("%lld\n", whole);
+    } else if (rem % 10 == 0) {
+        printf("%lld.%d\n", whole, rem / 10);
+    } else {
+        if (rem < 10)
+        printf("%lld.0%d\n", whole, rem);
+        else
+        printf("%lld.%02d\n", whole, rem);
+    }
+    return 0;
+}

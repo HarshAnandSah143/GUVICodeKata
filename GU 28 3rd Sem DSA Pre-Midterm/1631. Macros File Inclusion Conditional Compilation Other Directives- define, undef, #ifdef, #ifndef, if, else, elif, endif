@@ -1,0 +1,42 @@
+#include <stdio.h>
+#define BRONZE_DISCOUNT 0.05
+#define SILVER_DISCOUNT 0.10
+#define GOLD_DISCOUNT   0.15
+#define PLATINUM_DISCOUNT 0.20
+int main() {
+    float total, discount = 0.0, final;
+    int level;
+    scanf("%f %d", &total, &level);
+#if 1
+#if defined(BRONZE_DISCOUNT) && defined(SILVER_DISCOUNT) && defined(GOLD_DISCOUNT) && defined(PLATINUM_DISCOUNT)
+#if 0
+    #undef BRONZE_DISCOUNT
+#endif
+#if 1
+    if (level == 1) {
+        discount = BRONZE_DISCOUNT;
+        printf("Bronze Membership: 5%% Discount\n");
+    }
+    else if (level == 2) {
+        discount = SILVER_DISCOUNT;
+        printf("Silver Membership: 10%% Discount\n");
+    }
+    else if (level == 3) {
+        discount = GOLD_DISCOUNT;
+        printf("Gold Membership: 15%% Discount\n");
+    }
+    else if (level == 4) {
+        discount = PLATINUM_DISCOUNT;
+        printf("Platinum Membership: 20%% Discount\n");
+    }
+    else {
+        printf("Invalid membership level\n");
+        return 1;
+    }
+#endif
+    final = total * (1 - discount);
+    printf("Final Price: %.2f\n", final);
+#endif
+#endif
+    return 0;
+}

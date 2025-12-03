@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+int aggregator(const char *operation, int n, ...) {
+    va_list args;
+    va_start(args, n);
+    int result;
+    if (strcmp(operation, "sum") == 0) {
+        result = 0;
+        for (int i = 0; i < n; i++)
+            result += va_arg(args, int);
+    }
+    else if (strcmp(operation, "product") == 0) {
+        result = 1;
+        for (int i = 0; i < n; i++)
+            result *= va_arg(args, int);
+    }
+    else if (strcmp(operation, "max") == 0) {
+        result = va_arg(args, int);
+        for (int i = 1; i < n; i++) {
+            int temp = va_arg(args, int);
+            if (temp > result)
+                result = temp;
+        }
+    }
+    va_end(args);
+    return result;
+}
+int main() {
+    char operation[10];
+    int n;
+    scanf("%s", operation);
+    scanf("%d", &n);
+    int numbers[n];
+    for (int i = 0; i < n; i++)
+        scanf("%d", &numbers[i]);
+    int result;
+    if (strcmp(operation, "sum") == 0)
+        result = aggregator("sum", n, numbers[0], numbers[1], numbers[2], numbers[3], numbers[4]);
+    else if (strcmp(operation, "product") == 0)
+        result = aggregator("product", n, numbers[0], numbers[1], numbers[2], numbers[3], numbers[4]);
+    else
+        result = aggregator("max", n, numbers[0], numbers[1], numbers[2], numbers[3], numbers[4]);
+    int dynamic_result;
+    if (strcmp(operation, "sum") == 0) {
+        dynamic_result = 0;
+        for (int i = 0; i < n; i++)
+            dynamic_result += numbers[i];
+    }
+    else if (strcmp(operation, "product") == 0) {
+        dynamic_result = 1;
+        for (int i = 0; i < n; i++)
+            dynamic_result *= numbers[i];
+    }
+    else {
+        dynamic_result = numbers[0];
+        for (int i = 1; i < n; i++)
+            if (numbers[i] > dynamic_result)
+                dynamic_result = numbers[i];
+    }
+    printf("%d", dynamic_result);
+    return 0;
+}

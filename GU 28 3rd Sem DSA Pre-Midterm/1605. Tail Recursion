@@ -1,0 +1,14 @@
+#include <stdio.h>
+long long factorial(int n, long long acc) {
+    if (n == 0 || n == 1) {
+        return acc; 
+    }
+    return factorial(n - 1, n * acc); 
+}
+int main() {
+    int n;
+    scanf("%d", &n); 
+    long long result = factorial(n, 1); 
+    printf("%lld", result);
+    return 0;
+}

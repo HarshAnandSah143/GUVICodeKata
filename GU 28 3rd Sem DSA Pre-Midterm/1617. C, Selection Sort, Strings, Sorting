@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+int main() {
+    int n;
+    scanf("%d", &n);
+    char **words = (char **)malloc(n * sizeof(char *));
+    for (int i = 0; i < n; i++) {
+        words[i] = (char *)malloc(101 * sizeof(char));
+        scanf("%s", words[i]);
+    }
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            int len_min = strlen(words[min_idx]);
+            int len_j = strlen(words[j]);
+
+            if (len_j < len_min || 
+               (len_j == len_min && strcmp(words[j], words[min_idx]) < 0)) {
+                min_idx = j;
+            }
+        }
+        if (min_idx != i) {
+            char *temp = words[i];
+            words[i] = words[min_idx];
+            words[min_idx] = temp;
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", words[i]);
+        free(words[i]);
+    }
+    free(words);
+    return 0;
+}

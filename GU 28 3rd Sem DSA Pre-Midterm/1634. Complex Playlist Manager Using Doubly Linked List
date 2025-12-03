@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct Node {
+    char name[101];
+    int duration;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+Node* head = NULL;
+Node* tail = NULL;
+Node* current = NULL;
+void addSong(const char* name, int duration) {
+    Node* node = (Node*)malloc(sizeof(Node));
+    strcpy(node->name, name);
+    node->duration = duration;
+    node->prev = node->next = NULL;
+    if (!head) {
+        head = tail = node;
+        current = head;
+    } 
+    else {
+        tail->next = node;
+        node->prev = tail;
+        tail = node;
+    }
+}
+void deleteSong(const char* name) {
+    Node* ptr = head;
+    while (ptr) {
+        if (strcmp(ptr->name, name) == 0) {
+            if (ptr->prev)
+                ptr->prev->next = ptr->next;
+            else
+                head = ptr->next;
+            if (ptr->next)
+                ptr->next->prev = ptr->prev;
+            else
+                tail = ptr->prev;
+            if (current == ptr)
+                current = ptr->next ? ptr->next : ptr->prev;
+            free(ptr);
+            return;
+        }
+        ptr = ptr->next;
+    }
+    printf("Song not found\n");
+}
+void moveNext() {
+    if (current && current->next)
+        current = current->next;
+    else
+        printf("No next song\n");
+}
+void movePrev() {
+    if (current && current->prev)
+        current = current->prev;
+    else
+        printf("No previous song\n");
+}
+void printPlaylist() {
+    Node* ptr = current;
+    while (ptr) {
+        printf("%s", ptr->name);
+        if (ptr->next) printf(" ");
+        ptr = ptr->next;
+    }
+    printf("\n");
+}
+int main() {
+    int Q;
+    scanf("%d", &Q);
+    char cmd[16], name[101];
+    int duration;
+    for (int i = 0; i < Q; i++) {
+        scanf("%s", cmd);
+        if (strcmp(cmd, "ADD") == 0) {
+            scanf("%s %d", name, &duration);
+            addSong(name, duration);
+        } 
+        else if (strcmp(cmd, "DELETE") == 0) {
+            scanf("%s", name);
+            deleteSong(name);
+        } 
+        else if (strcmp(cmd, "NEXT") == 0) {
+            moveNext();
+        } 
+        else if (strcmp(cmd, "PREV") == 0) {
+            movePrev();
+        } 
+        else if (strcmp(cmd, "PRINT") == 0) {
+            printPlaylist();
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,28 @@
+#include <stdio.h>
+int main() {
+    int R, C, U;
+    scanf("%d %d", &R, &C);
+    scanf("%d", &U);
+    int grid[102][102] = {0};
+    for (int i = 0; i < U; i++) {
+        int r1, c1, r2, c2, value;
+        scanf("%d %d %d %d %d", &r1, &c1, &r2, &c2, &value);
+        grid[r1][c1] += value;
+        grid[r1][c2 + 1] -= value;
+        grid[r2 + 1][c1] -= value;
+        grid[r2 + 1][c2 + 1] += value;
+    }
+    for (int i = 1; i <= R; i++) {
+        for (int j = 1; j <= C; j++) {
+            grid[i][j] += grid[i - 1][j] + grid[i][j - 1] - grid[i - 1][j - 1];
+        }
+    }
+    int total = 0;
+    for (int i = 1; i <= R; i++) {
+        for (int j = 1; j <= C; j++) {
+            total += grid[i][j];
+        }
+    }
+    printf("Total number of products: %d\n", total);
+    return 0;
+}

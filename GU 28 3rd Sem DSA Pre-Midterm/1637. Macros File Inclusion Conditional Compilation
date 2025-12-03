@@ -1,0 +1,20 @@
+#include <stdio.h>
+#define JUNIOR 30000
+#define MIDLEVEL 50000
+#define SENIOR 70000
+int main() {
+    int exp;
+    scanf("%d", &exp);
+#if 1
+    if (exp < 5) {
+        printf("Junior\nSalary: %d\n", JUNIOR);
+    }
+    else if (exp <= 10) {
+        printf("Mid-level\nSalary: %d\n", MIDLEVEL);
+    }
+    else {
+        printf("Senior\nSalary: %d\n", SENIOR);
+    }
+#endif
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include <stdio.h>
+typedef struct {
+    int num;
+    int denom;
+} Fraction;
+double value(Fraction f) {
+    return (double)f.num / f.denom;
+}
+void merge(Fraction arr[], int l, int m, int r) {
+    int n1 = m - l + 1, n2 = r - m;
+    Fraction L[n1], R[n2];
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (value(L[i]) <= value(R[j]))
+            arr[k++] = L[i++];
+        else
+            arr[k++] = R[j++];
+    }
+    while (i < n1)
+        arr[k++] = L[i++];
+    while (j < n2)
+        arr[k++] = R[j++];
+}
+void mergeSort(Fraction arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    Fraction arr[n];
+    for (int i = 0; i < n; i++)
+        scanf("%d %d", &arr[i].num, &arr[i].denom);
+    mergeSort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++)
+        printf("%d/%d\n", arr[i].num, arr[i].denom);
+    return 0;
+}

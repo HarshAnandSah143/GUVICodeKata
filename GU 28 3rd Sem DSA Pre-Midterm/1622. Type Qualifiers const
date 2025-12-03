@@ -1,0 +1,15 @@
+#include <stdio.h>
+int main() {
+    int n;
+    scanf("%d", &n);
+    float readings[n];   // fixed "float"
+    for (int i = 0; i < n; i++) {
+        scanf("%f", &readings[i]);
+    }
+    const float *constSensor = readings;
+    printf("Sensor Readings:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%.2f\n", constSensor[i]);
+    }
+    return 0;
+}

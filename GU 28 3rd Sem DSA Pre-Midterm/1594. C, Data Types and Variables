@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef union {
+    char passFail;
+    int gradeCategory;
+} Status;
+
+typedef struct {
+    char name[50];
+    int id;
+    float grades[5];
+    float average;
+    Status status;
+    int usePassFail;
+} Student;
+
+void inputStudentData(Student *s, int n) {
+    for (int i = 0; i < n; i++) {
+        scanf("%s", s[i].name);
+        scanf("%d", &s[i].id);
+        for (int j = 0; j < 5; j++) {
+            scanf("%f", &s[i].grades[j]);
+        }
+        s[i].usePassFail = 0;
+    }
+}
+
+void calculateAverage(Student *s, int n) {
+    for (int i = 0; i < n; i++) {
+        float sum = 0;
+        for (int j = 0; j < 5; j++) {
+            sum += s[i].grades[j];
+        }
+        s[i].average = sum / 5.0;
+    }
+}
+
+void determineStatus(Student *s, int n) {
+    for (int i = 0; i < n; i++) {
+        if (s[i].average >= 85) {
+            s[i].status.gradeCategory = 1;
+            s[i].usePassFail = 0;
+        } else if (s[i].average >= 70) {
+            s[i].status.gradeCategory = 2;
+            s[i].usePassFail = 0;
+        } else if (s[i].average >= 50) {
+            s[i].status.passFail = 'P';
+            s[i].usePassFail = 1;
+        } else {
+            s[i].status.passFail = 'F';
+            s[i].usePassFail = 1;
+        }
+    }
+}
+
+void displayStudents(const Student *s, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", s[i].name);
+        printf("%d\n", s[i].id);
+        for (int j = 0; j < 5; j++) {
+            printf("%.1f ", s[i].grades[j]);
+        }
+        printf("\n%.1f\n", s[i].average);
+        if (s[i].usePassFail) {
+            printf("%c\n", s[i].status.passFail);
+        } else {
+            printf("%d\n", s[i].status.gradeCategory);
+        }
+    }
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    Student students[n];
+    inputStudentData(students, n);
+    calculateAverage(students, n);
+    determineStatus(students, n);
+    displayStudents(students, n);
+    return 0;
+}

@@ -1,0 +1,19 @@
+#include <stdio.h>
+int main() {
+    int n;
+    int weights[5];
+    int operation;
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+    scanf("%d", &weights[i]);
+    scanf("%d", &operation);
+    int minIndex = (weights[0] <= weights[1] ? 0 : 1);
+    minIndex = (weights[minIndex] <= weights[2] ? minIndex : 2);
+    minIndex = (weights[minIndex] <= weights[3] ? minIndex : 3);
+    minIndex = (weights[minIndex] <= weights[4] ? minIndex : 4);
+    int selectedWeight = ((weights[minIndex] = (operation == 0 ? weights[minIndex]+1 : weights[minIndex]-1)),weights[minIndex]);
+    int sizeOfContainer = sizeof(weights[minIndex]);
+    printf("Selected Container Weight: %d\n", selectedWeight);
+    printf("Size of Container: %d\n", sizeOfContainer);
+    return 0;
+}

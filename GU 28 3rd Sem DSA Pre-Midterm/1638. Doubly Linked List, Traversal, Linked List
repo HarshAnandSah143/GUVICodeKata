@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+struct Node* head = NULL;
+struct Node* tail = NULL;
+void insertEnd(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    if (head == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    newNode->prev = tail;
+    tail = newNode;
+}
+void displayForward() {
+    struct Node* current = head;
+    printf("Forward: ");
+    while (current != NULL) {
+        printf("%d", current->data);
+        if (current->next != NULL) {
+            printf(" ");
+        }
+        current = current->next;
+    }
+    printf("\n");
+}
+void displayBackward() {
+    struct Node* current = tail;
+    printf("Backward: ");
+    while (current != NULL) {
+        printf("%d", current->data);
+        if (current->prev != NULL) {
+            printf(" ");
+        }
+        current = current->prev;
+    }
+    printf("\n");
+}
+int main() {
+    int n, element;
+    if (scanf("%d", &n) != 1)
+        return 1;
+    for (int i = 0; i < n; i++) {
+        if (scanf("%d", &element) != 1)
+            return 1;
+        insertEnd(element);
+    }
+    displayForward();
+    displayBackward();
+    struct Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+    tail = NULL;
+    return 0;
+}

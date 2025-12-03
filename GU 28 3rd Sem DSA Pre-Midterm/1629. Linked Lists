@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Node {
+    int val;
+    struct Node *next;
+} Node;
+typedef struct {
+    Node **a;
+    int size;
+    int cap;
+} MinHeap;
+MinHeap* heap_create(int cap) {
+    MinHeap *h = (MinHeap*)malloc(sizeof(MinHeap));
+    h->a = (Node**)malloc(sizeof(Node*) * cap);
+    h->size = 0;
+    h->cap = cap;
+    return h;
+}
+void heap_swap(Node **x, Node **y) {
+    Node *t = *x;
+    *x = *y;
+    *y = t;
+}
+void heap_push(MinHeap *h, Node *node) {
+    if (node == NULL) return;
+    int i = h->size++;
+    h->a[i] = node;
+    while (i > 0) {
+        int p = (i - 1) / 2;
+        if (h->a[p]->val <= h->a[i]->val) break;
+        heap_swap(&h->a[p], &h->a[i]);
+        i = p;
+    }
+}
+Node* heap_pop(MinHeap *h) {
+    if (h->size == 0) return NULL;
+    Node *ret = h->a[0];
+    h->size--;
+    if (h->size > 0) {
+        h->a[0] = h->a[h->size];
+        int i = 0;
+        while (1) {
+            int l = 2 * i + 1;
+            int r = 2 * i + 2;
+            int smallest = i;
+            if (l < h->size && h->a[l]->val < h->a[smallest]->val) smallest = l;
+            if (r < h->size && h->a[r]->val < h->a[smallest]->val) smallest = r;
+            if (smallest == i) break;
+            heap_swap(&h->a[i], &h->a[smallest]);
+            i = smallest;
+        }
+    }
+
+    return ret;
+}
+void heap_free(MinHeap *h) {
+    free(h->a);
+    free(h);
+}
+int main() {
+    int K;
+    if (scanf("%d", &K) != 1) return 0;
+    if (K <= 0) return 0;
+    Node **heads = (Node**)malloc(sizeof(Node*) * K);
+    for (int i = 0; i < K; ++i) heads[i] = NULL;
+    for (int i = 0; i < K; ++i) {
+        int N;
+        scanf("%d", &N);
+        Node *head = NULL, *tail = NULL;
+        for (int j = 0; j < N; ++j) {
+            int x;
+            scanf("%d", &x);
+            Node *p = (Node*)malloc(sizeof(Node));
+            p->val = x;
+            p->next = NULL;
+            if (head == NULL)
+                head = tail = p;
+            else {
+                tail->next = p;
+                tail = p;
+            }
+        }
+        heads[i] = head;
+    }
+    MinHeap *h = heap_create(K);
+    for (int i = 0; i < K; ++i) {
+        if (heads[i] != NULL) heap_push(h, heads[i]);
+    }
+    int first = 1;
+    while (h->size > 0) {
+        Node *cur = heap_pop(h);
+        if (!first) printf(" ");
+        printf("%d", cur->val);
+        first = 0;
+        if (cur->next != NULL)
+            heap_push(h, cur->next);
+        free(cur); // safe to free after using next
+    }
+    printf("\n");
+    heap_free(h);
+    free(heads);
+    return 0;
+}

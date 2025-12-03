@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <string.h>
+struct Employee {
+    char name[100];
+    int salary;
+};
+void swap(struct Employee *a, struct Employee *b) {
+    struct Employee temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int compare(struct Employee a, struct Employee b) {
+    if (a.salary > b.salary)
+        return 1;
+    else if (a.salary < b.salary)
+        return 0;
+    else
+        return strcmp(a.name, b.name) < 0;
+}
+int partition(struct Employee arr[], int low, int high) {
+    struct Employee pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (compare(arr[j], pivot)) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return i + 1;
+}
+void quickSort(struct Employee arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    struct Employee arr[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%s %d", arr[i].name, &arr[i].salary);
+    }
+    quickSort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++) {
+        printf("%s %d\n", arr[i].name, arr[i].salary);
+    }
+    return 0;
+}

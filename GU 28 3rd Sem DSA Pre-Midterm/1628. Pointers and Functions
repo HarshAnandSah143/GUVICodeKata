@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct Node {
+    int data;
+    struct Node *next;
+};
+void insertNode(struct Node **head, int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node *temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+}
+void deleteNode(struct Node **head, int value) {
+    struct Node *temp = *head;
+    struct Node *prev = NULL;
+    while (temp != NULL && temp->data == value) {
+        *head = temp->next;
+        free(temp);
+        temp = *head;
+    }
+    while (temp != NULL) {
+        while (temp != NULL && temp->data != value) {
+            prev = temp;
+            temp = temp->next;
+        }
+        if (temp == NULL)
+            return;
+        prev->next = temp->next;
+        free(temp);
+        temp = prev->next;
+    }
+}
+void reverseList(struct Node **head) {
+    struct Node *prev = NULL, *curr = *head, *next = NULL;
+    while (curr != NULL) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    *head = prev;
+}
+void printList(struct Node *head) {
+    if (head == NULL) {
+        printf("EMPTY\n");
+        return;
+    }
+    struct Node *temp = head;
+    while (temp != NULL) {
+        printf("%d", temp->data);
+        if (temp->next != NULL) printf(" ");
+        temp = temp->next;
+    }
+    printf("\n");
+}
+int main() {
+    int Q;
+    scanf("%d", &Q);
+    struct Node *head = NULL;
+    for (int i = 0; i < Q; i++) {
+        char op[10];
+        scanf("%s", op);
+        if (strcmp(op, "INSERT") == 0) {
+            int x;
+            scanf("%d", &x);
+            insertNode(&head, x);
+        }
+        else if (strcmp(op, "DELETE") == 0 || strcmp(op, "cancel") == 0) {
+            int x;
+            scanf("%d", &x);
+            deleteNode(&head, x);
+        }
+        else if (strcmp(op, "REVERSE") == 0 || strcmp(op, "Rear") == 0) {
+            reverseList(&head);
+        }
+    }
+    printList(head);
+    return 0;
+}

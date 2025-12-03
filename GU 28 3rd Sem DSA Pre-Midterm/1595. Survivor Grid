@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_DIM 502
+
+int dr[] = {-1, 1, 0, 0};
+int dc[] = {0, 0, -1, 1};
+int n, m;
+int grid[MAX_DIM][MAX_DIM];
+int visited[MAX_DIM][MAX_DIM];
+typedef struct {
+    int r, c;
+} Cell;
+Cell queue[MAX_DIM * MAX_DIM];
+int front = 0, rear = 0;
+void enqueue(int r, int c) {
+    queue[rear].r = r;
+    queue[rear].c = c;
+    rear++;
+}
+Cell dequeue() {
+    return queue[front++];
+}
+int isQueueEmpty() {
+    return front == rear;
+}
+long long bfs(int startR, int startC) {
+    front = rear = 0;
+    enqueue(startR, startC);
+    visited[startR][startC] = 1;
+    long long currentComponentSoldiers = grid[startR][startC];
+    while (!isQueueEmpty()) {
+        Cell current = dequeue();
+        int r = current.r;
+        int c = current.c;
+        for (int i = 0; i < 4; i++) {
+            int nr = r + dr[i];
+            int nc = c + dc[i];
+            if (nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] > 0 && !visited[nr][nc]) {
+                visited[nr][nc] = 1;
+                currentComponentSoldiers += grid[nr][nc];
+                enqueue(nr, nc);
+            }
+        }
+    }
+    return currentComponentSoldiers;
+}
+
+int main() {
+    if (scanf("%d %d", &n, &m) != 2) return 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            scanf("%d", &grid[i][j]);
+            visited[i][j] = 0;
+        }
+    }
+    long long maxSoldiers = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] > 0 && !visited[i][j]) {
+                long long currentSoldiers = bfs(i, j);
+                if (currentSoldiers > maxSoldiers) {
+                    maxSoldiers = currentSoldiers;
+                }
+            }
+        }
+    }
+    printf("%lld\n", maxSoldiers);
+    return 0;
+}
