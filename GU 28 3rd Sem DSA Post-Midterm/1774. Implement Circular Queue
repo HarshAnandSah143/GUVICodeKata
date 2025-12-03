@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 10005
+int queueArr[MAX];
+int front = -1, rear = -1, n;
+int isFull() {
+    return (front == (rear + 1) % n);
+}
+
+int isEmpty() {
+    return (front == -1);
+}
+void enqueue(int x) {
+    if (isFull()) {
+        printf("Queue Overflow\n");
+        return;
+    }
+    if (isEmpty()) {
+        front = rear = 0;
+    } else {
+        rear = (rear + 1) % n;
+    }
+    queueArr[rear] = x;
+}
+void dequeue() {
+    if (isEmpty()) {
+        printf("Queue Underflow\n");
+        return;
+    }
+    if (front == rear) {
+        front = rear = -1;
+    } else {
+        front = (front + 1) % n;
+    }
+}
+void display() {
+    if (isEmpty()) {
+        return;
+    }
+    int i = front;
+    while (1) {
+        printf("%d", queueArr[i]);
+        if (i == rear) break;
+        printf(" ");
+        i = (i + 1) % n;
+    }
+    printf("\n");
+}
+int main() {
+    scanf("%d", &n);
+    char op[20];
+    while (scanf("%s", op) != EOF) {
+        if (strcmp(op, "enqueue") == 0) {
+            int x;
+            scanf("%d", &x);
+            enqueue(x);
+        }
+        else if (strcmp(op, "dequeue") == 0) {
+            dequeue();
+        }
+        else if (strcmp(op, "display") == 0) {
+            display();
+        }
+    }
+    return 0;
+}
