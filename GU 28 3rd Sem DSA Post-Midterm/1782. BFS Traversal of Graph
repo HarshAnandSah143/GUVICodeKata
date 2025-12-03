@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 1000
+typedef struct Node {
+    int vertex;
+    struct Node* next;
+} Node;
+typedef struct Queue {
+    int data[MAX];
+    int front, rear;
+} Queue;
+void enqueue(Queue* q, int val) {
+    q->data[q->rear++] = val;
+}
+int dequeue(Queue* q) {
+    return q->data[q->front++];
+}
+int isEmpty(Queue* q) {
+    return q->front == q->rear;
+}
+Node* createNode(int v) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->vertex = v;
+    newNode->next = NULL;
+    return newNode;
+}
+void addEdge(Node* adj[], int u, int v) {
+    Node* node = createNode(v);
+    node->next = adj[u];
+    adj[u] = node;
+    node = createNode(u);
+    node->next = adj[v];
+    adj[v] = node;
+}
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    Node* adj[MAX];
+    for (int i = 0; i < n; i++)
+        adj[i] = NULL;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        addEdge(adj, u, v);
+    }
+    int source;
+    scanf("%d", &source);
+    int visited[MAX] = {0};
+    Queue q;
+    q.front = q.rear = 0;
+    enqueue(&q, source);
+    visited[source] = 1;
+    int first = 1;
+    while (!isEmpty(&q)) {
+        int u = dequeue(&q);
+        if (first) {
+            printf("%d", u);
+            first = 0;
+        } else {
+            printf(" %d", u);
+        }
+        Node* temp = adj[u];
+        while (temp != NULL) {
+            int v = temp->vertex;
+            if (!visited[v]) {
+                visited[v] = 1;
+                enqueue(&q, v);
+            }
+            temp = temp->next;
+        }
+    }
+    printf("\n");
+    return 0;
+}
