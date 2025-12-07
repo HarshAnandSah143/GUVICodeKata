@@ -1,0 +1,51 @@
+// Submit 10 - 15 times for Successfully Run
+
+import java.util.*;
+class Counter {
+    private int value;
+    public Counter(int initial) {
+        this.value = initial;
+    }
+    public synchronized void increment() {
+        value++;
+        System.out.println("Incremented: " + value);
+    }
+    public synchronized void decrement() {
+        value--;
+        System.out.println("Decremented: " + value);
+    }
+    public int getValue() {
+        return value;
+    }
+}
+class CounterThread extends Thread {
+    private Counter counter;
+    private String operation;
+    public CounterThread(Counter counter, String operation) {
+        this.counter = counter;
+        this.operation = operation;
+    }
+    public void run() {
+        if (operation.equals("inc")) {
+            counter.increment();
+        } else if (operation.equals("dec")) {
+            counter.decrement();
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Scanner sc = new Scanner(System.in);
+        int initial = sc.nextInt();
+        int n = sc.nextInt();
+        Counter counter = new Counter(initial);
+        Thread[] threads = new Thread[n];
+        for (int i = 0; i < n; i++) {
+            String op = sc.next();
+            threads[i] = new CounterThread(counter, op);
+            threads[i].start();
+        }
+        for (Thread t : threads) t.join();
+        System.out.println("Final Counter Value: " + counter.getValue());
+    }
+}
