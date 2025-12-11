@@ -1,0 +1,48 @@
+#include <stdio.h>
+double mysqrt(double num) {
+    if (num <= 0.0) return 0.0;
+    double guess = num / 2.0;
+    for (int i = 0; i < 25; i++) {
+        guess = 0.5 * (guess + num / guess);
+    }
+    return guess;
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    if (n < 1 || n > 100) {
+        printf("Invalid array size. Size must be between 1 and 100.\n");
+        return 0;
+    }
+    double arr[100];
+    for (int i = 0; i < n; i++) {
+        scanf("%lf", &arr[i]);
+    }
+    double sum = 0.0;
+    for (int i = 0; i < n; i++) {
+        sum += arr[i];
+    }
+    double average = sum / n;
+    double max = arr[0];
+    double min = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) max = arr[i];
+        if (arr[i] < min) min = arr[i];
+    }
+    double variance = 0.0;
+    for (int i = 0; i < n; i++) {
+        double diff = arr[i] - average;
+        variance += diff * diff;
+    }
+    if (n > 1)
+        variance /= n;
+    else
+        variance = 0.0;
+
+    double std_dev = mysqrt(variance);
+    printf("Average: %.2lf\n", average);
+    printf("Maximum: %.2lf\n", max);
+    printf("Minimum: %.2lf\n", min);
+    printf("Standard Deviation: %.2lf\n", std_dev);
+    return 0;
+}
